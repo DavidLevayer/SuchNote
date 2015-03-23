@@ -3,4 +3,10 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="button_1">Button1</string>
+    <string name="button_2">Button2</string>
+    <string name="button_3">Button3</string>
+    <string name="button_4">Button4</string>
+
 </resources>
