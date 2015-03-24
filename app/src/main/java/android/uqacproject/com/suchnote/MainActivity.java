@@ -2,6 +2,11 @@ package android.uqacproject.com.suchnote;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.uqacproject.com.suchnote.audiofragment.AudioDialogFragment;
@@ -12,15 +17,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.HashMap;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements SensorEventListener {
 
     public final static int AUDIO_FRAGMENT_ID = 0;
     public final static int VIDEO_FRAGMENT_ID = 1;
     public final static int PHOTO_FRAGMENT_ID = 2;
     public final static int TEXT_FRAGMENT_ID = 3;
 
+    private HashMap<Integer,Object> sensorValues;
+    private SensorManager mSensorManager;
+    private Sensor mLightSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +69,9 @@ public class MainActivity extends ActionBarActivity {
                 launchDialogFragment(VIDEO_FRAGMENT_ID);
             }
         });
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
     }
 
     @Override
@@ -103,4 +117,34 @@ public class MainActivity extends ActionBarActivity {
         }
         f.show(fm, "note_dialog_fragment");
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(sensorValues == null)
+            sensorValues = new HashMap<>();
+
+        mSensorManager.registerListener(this,mLightSensor,SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        switch(event.sensor.getType()){
+            case Sensor.TYPE_LIGHT:
+                sensorValues.put(Sensor.TYPE_LIGHT,event.values[0]);
+                ((TextView)findViewById(R.id.sensor_debug)).setText(String.valueOf(event.values[0]));
+                break;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) { }
 }
