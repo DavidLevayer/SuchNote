@@ -35,7 +35,19 @@
         android:text="@string/smart_button"/>
 
     <TextView
-        android:id="@+id/sensor_debug"
+        android:id="@+id/sensor_light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/sensor_wifi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/sensor_speed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"/>

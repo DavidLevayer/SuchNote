@@ -7,8 +7,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.support.v7.app.ActionBarActivity;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.uqacproject.com.suchnote.audiofragment.AudioDialogFragment;
 import android.uqacproject.com.suchnote.photofragment.PhotoDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
@@ -32,6 +37,9 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     private HashMap<Integer,Object> sensorValues;
     private SensorManager mSensorManager;
     private Sensor mLightSensor;
+    private WifiManager mWifiManager;
+    private LocationManager mLocationManager;
+    private LocationListener mLocationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +80,22 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        // Define a listener that responds to location updates
+        mLocationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                location.getLatitude();
+                ((TextView)findViewById(R.id.sensor_speed)).setText(String.valueOf(location.getSpeed()));
+            }
+            public void onStatusChanged(String provider, int status, Bundle extras) { }
+            public void onProviderEnabled(String provider) { }
+            public void onProviderDisabled(String provider) { }
+        };
+
+
     }
 
     @Override
@@ -126,6 +150,14 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             sensorValues = new HashMap<>();
 
         mSensorManager.registerListener(this,mLightSensor,SensorManager.SENSOR_DELAY_NORMAL);
+
+        WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+        String ssid = "none";
+        if(mWifiInfo != null)
+            ssid = mWifiInfo.getSSID();
+        ((TextView)findViewById(R.id.sensor_wifi)).setText(ssid);
+
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
     }
 
     @Override
@@ -133,6 +165,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         super.onPause();
 
         mSensorManager.unregisterListener(this);
+        mLocationManager.removeUpdates(mLocationListener);
     }
 
     @Override
@@ -140,7 +173,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         switch(event.sensor.getType()){
             case Sensor.TYPE_LIGHT:
                 sensorValues.put(Sensor.TYPE_LIGHT,event.values[0]);
-                ((TextView)findViewById(R.id.sensor_debug)).setText(String.valueOf(event.values[0]));
+                ((TextView)findViewById(R.id.sensor_light)).setText(String.valueOf(event.values[0]));
                 break;
         }
     }
