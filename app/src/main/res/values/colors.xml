@@ -4,5 +4,7 @@
     <color name="accent_color">#00FF00</color>
     <color name="fab_color_1">#FF0000</color>
     <color name="accent_color_negative">#FFFFFF</color>
+    <color name="round_button_pressed">#0000FF</color>
+    <color name="round_button">#FFFFFF</color>
 
 </resources>
