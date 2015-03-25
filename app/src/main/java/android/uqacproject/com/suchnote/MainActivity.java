@@ -1,5 +1,6 @@
 package android.uqacproject.com.suchnote;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -15,7 +16,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.uqacproject.com.suchnote.audiofragment.AudioDialogFragment;
 import android.uqacproject.com.suchnote.photofragment.PhotoDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
@@ -29,7 +29,7 @@ import android.widget.ListView;
 import java.util.HashMap;
 
 
-public class MainActivity extends ActionBarActivity implements SensorEventListener {
+public class MainActivity extends Activity implements SensorEventListener {
 
     public final static int AUDIO_FRAGMENT_ID = 0;
     public final static int VIDEO_FRAGMENT_ID = 1;
@@ -56,6 +56,11 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         mViewPager.setAdapter(new SamplePagerAdapter());
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        //final ActionBar mActionBar = getActionBar();
+        //mActionBar.setDisplayShowTitleEnabled(false);
+        //mActionBar.setDisplayHomeAsUpEnabled(true);
+        //mActionBar.setHomeButtonEnabled(true);
 
         initSensors();
     }
