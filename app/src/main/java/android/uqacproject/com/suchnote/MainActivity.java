@@ -19,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.uqacproject.com.suchnote.audiofragment.AudioDialogFragment;
 import android.uqacproject.com.suchnote.photofragment.PhotoDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
+import android.uqacproject.com.suchnote.videofragment.Note;
 import android.uqacproject.com.suchnote.videofragment.VideoDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,15 +27,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class MainActivity extends Activity implements SensorEventListener {
 
-    public final static int AUDIO_FRAGMENT_ID = 0;
-    public final static int VIDEO_FRAGMENT_ID = 1;
-    public final static int PHOTO_FRAGMENT_ID = 2;
-    public final static int TEXT_FRAGMENT_ID = 3;
+    public final static int TEXT_NOTE = 0;
+    public final static int AUDIO_NOTE = 1;
+    public final static int PHOTO_NOTE = 2;
+    public final static int VIDEO_NOTE = 3;
+
+    private Context mContext;
 
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
@@ -51,12 +55,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(new SamplePagerAdapter());
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
 
+        // TODO remove or update actionbar
         //final ActionBar mActionBar = getActionBar();
         //mActionBar.setDisplayShowTitleEnabled(false);
         //mActionBar.setDisplayHomeAsUpEnabled(true);
@@ -93,13 +99,13 @@ public class MainActivity extends Activity implements SensorEventListener {
         DialogFragment f = null;
 
         switch (dialogFragmentId) {
-            case AUDIO_FRAGMENT_ID:
+            case AUDIO_NOTE:
                 f = new AudioDialogFragment();
                 break;
-            case VIDEO_FRAGMENT_ID:
+            case VIDEO_NOTE:
                 f = new VideoDialogFragment();
                 break;
-            case PHOTO_FRAGMENT_ID:
+            case PHOTO_NOTE:
                 f = new PhotoDialogFragment();
                 break;
             default:
@@ -178,7 +184,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     class SamplePagerAdapter extends PagerAdapter {
 
         private ListView mListView;
-        //private NewsArrayAdapter mListViewAdapter;
+        private NoteArrayAdapter mNoteAdapter;
 
         @Override
         public int getCount() {
@@ -194,13 +200,13 @@ public class MainActivity extends Activity implements SensorEventListener {
         public CharSequence getPageTitle(int position) {
             String[] tabs = getResources().getStringArray(R.array.activity_tabs);
             switch (position) {
-                case TEXT_FRAGMENT_ID:
+                case TEXT_NOTE:
                     return tabs[0];
-                case AUDIO_FRAGMENT_ID:
+                case AUDIO_NOTE:
                     return tabs[1];
-                case PHOTO_FRAGMENT_ID:
+                case PHOTO_NOTE:
                     return tabs[2];
-                case VIDEO_FRAGMENT_ID:
+                case VIDEO_NOTE:
                     return tabs[3];
             }
             return "noName";
@@ -214,11 +220,11 @@ public class MainActivity extends Activity implements SensorEventListener {
                     container, false);
 
             mListView = (ListView) view.findViewById(R.id.note_listview);
-            //mListViewAdapter = new NewsArrayAdapter(mContext, new ArrayList<News>());
-            //mListView.setAdapter(mListViewAdapter);
-            //mListView.setOnItemClickListener(HomeFragment.this);
+            mNoteAdapter = new NoteArrayAdapter(mContext, new ArrayList<Note>());
+            mListView.setAdapter(mNoteAdapter);
 
             // TODO Add element to the list
+            loadNotes(position);
 
             // Add the newly created View to the ViewPager
             container.addView(view);
@@ -230,6 +236,34 @@ public class MainActivity extends Activity implements SensorEventListener {
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+        }
+
+        private void loadNotes(int position){
+
+            Note[] mNotes = null;
+            switch(position){
+                // Texte
+                case TEXT_NOTE:
+                    mNotes = FileManager.getNotes(TEXT_NOTE);
+                    break;
+                // Audio
+                case AUDIO_NOTE:
+                    mNotes = FileManager.getNotes(AUDIO_NOTE);
+                    break;
+                // Photo
+                case PHOTO_NOTE:
+                    mNotes = FileManager.getNotes(PHOTO_NOTE);
+                    break;
+                // Vidéo
+                case VIDEO_NOTE:
+                    mNotes = FileManager.getNotes(VIDEO_NOTE);
+                    break;
+            }
+
+            if(mNotes != null){
+                for(Note n : mNotes)
+                    mNoteAdapter.add(n);
+            }
         }
     }
 }

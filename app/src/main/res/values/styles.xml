@@ -20,7 +20,7 @@
         <!-- Suppression des titres l'actionBar -->
         <item name="android:displayOptions">useLogo|showHome</item>
         <!-- Icone custom pour l'actionBar -->
-        <item name="android:icon">@null</item>
+        <item name="android:icon">@android:color/transparent</item>
     </style>
 
 </resources>

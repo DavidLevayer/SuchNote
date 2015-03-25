@@ -4,6 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- ATTENTION :
+    l'ordre des onglets doit respecter les indices présents
+    dans la classe FileManager (cohérence générale des indices de l'application) -->
     <string-array name="activity_tabs">
         <item>Texte</item>
         <item>Audio</item>
