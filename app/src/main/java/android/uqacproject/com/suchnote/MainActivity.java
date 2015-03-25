@@ -20,9 +20,6 @@ import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
 import android.uqacproject.com.suchnote.videofragment.VideoDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.HashMap;
 
@@ -46,38 +43,6 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button b1 = (Button) findViewById(R.id.button1);
-        b1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchDialogFragment(TEXT_FRAGMENT_ID);
-            }
-        });
-
-        Button b2 = (Button) findViewById(R.id.button2);
-        b2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchDialogFragment(PHOTO_FRAGMENT_ID);
-            }
-        });
-
-        Button b3 = (Button) findViewById(R.id.button3);
-        b3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchDialogFragment(AUDIO_FRAGMENT_ID);
-            }
-        });
-
-        Button b4 = (Button) findViewById(R.id.button4);
-        b4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchDialogFragment(VIDEO_FRAGMENT_ID);
-            }
-        });
-
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
@@ -88,7 +53,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         mLocationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 location.getLatitude();
-                ((TextView)findViewById(R.id.sensor_speed)).setText(String.valueOf(location.getSpeed()));
+                // TODO save la vitesse
             }
             public void onStatusChanged(String provider, int status, Bundle extras) { }
             public void onProviderEnabled(String provider) { }
@@ -155,7 +120,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         String ssid = "none";
         if(mWifiInfo != null)
             ssid = mWifiInfo.getSSID();
-        ((TextView)findViewById(R.id.sensor_wifi)).setText(ssid);
+        // TODO save l'id wifi
 
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
     }
@@ -173,7 +138,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         switch(event.sensor.getType()){
             case Sensor.TYPE_LIGHT:
                 sensorValues.put(Sensor.TYPE_LIGHT,event.values[0]);
-                ((TextView)findViewById(R.id.sensor_light)).setText(String.valueOf(event.values[0]));
+                // TODO save la luminosité
                 break;
         }
     }

@@ -10,5 +10,6 @@
     <string name="button_4">Video</string>
 
     <string name="smart_button">Prendre une note</string>
+    <string name="activity_title">Blueprint</string>
 
 </resources>
