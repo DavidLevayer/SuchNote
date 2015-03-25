@@ -52,4 +52,30 @@
         android:layout_height="wrap_content"
         android:gravity="center"/>
 
+    <ListView
+        android:id="@+id/note_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.uqacproject.com.suchnote.FloatingActionButton
+        android:id="@+id/fab_1"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_below="@id/sensor_speed"
+        android:layout_marginTop="-28dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/drop_shadow"
+        android:stateListAnimator="@animator/fab_anim"
+        android:foreground="?android:windowContentOverlay">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/fab_icons"
+            android:layout_gravity="center"
+            android:duplicateParentState="true" />
+
+    </android.uqacproject.com.suchnote.FloatingActionButton>
+
 </LinearLayout>
