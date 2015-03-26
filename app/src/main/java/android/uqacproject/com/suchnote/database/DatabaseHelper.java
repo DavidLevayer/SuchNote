@@ -9,29 +9,40 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String TABLE_NOTE_DATA = "wifidata";
+    public static final String TABLE_NOTE_DATA = "notedata";
 
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_FILENAME = "filename";
-    public static final String COLUMN_NOTETYPE = "notetype";
-    public static final String COLUMN_SSID = "networkssid";
-    public static final String COLUMN_SSID_ASSOCIATED_NAME = "ssidassociatedname";
-    public static final String COLUMN_PREFERENCE = "notemodepreference";
+    public static final String NOTEDATA_ID = "_id";
+    public static final String NOTEDATA_FILENAME = "filename";
+    public static final String NOTEDATA_NOTETYPE = "notetype";
+    public static final String NOTEDATA_SSID_ASSOCIATED_NAME = "ssidassociatedname";
+    public static final String NOTEDATA_PREFERENCE = "notemodepreference";
+
+    public static final String TABLE_WIFI_DATA = "wifidata";
+
+    public static final String WIFIDATA_ID = "_id";
+    public static final String WIFIDATA_SSID = "wifidatassid";
+    public static final String WIFIDATA_SSID_ASSOCIATED_NAME = "wifidataassociatedname";
 
     private static final String DATABASE_NAME = "notes.db";
     private static final int DATABASE_VERSION = 1;
 
     private Context mContext;
 
+    // Création de la table Note dans la base de données
+    private static final String DATABASE_CREATE_NOTE_TABLE = "create table "
+            + TABLE_NOTE_DATA + "(" +
+            NOTEDATA_ID + " integer primary key autoincrement, " +
+            NOTEDATA_FILENAME + " text not null, " +
+            NOTEDATA_NOTETYPE + " text not null, " +
+            NOTEDATA_SSID_ASSOCIATED_NAME + " text, " +
+            NOTEDATA_PREFERENCE + " text);";
+
     // Création de la table Wifi dans la base de données
     private static final String DATABASE_CREATE_WIFI_TABLE = "create table "
-            + TABLE_NOTE_DATA + "(" +
-            COLUMN_ID + " integer primary key autoincrement, " +
-            COLUMN_FILENAME + " text not null, " +
-            COLUMN_NOTETYPE + " text not null, " +
-            COLUMN_SSID + " text not null, " +
-            COLUMN_SSID_ASSOCIATED_NAME + " text, " +
-            COLUMN_PREFERENCE + " text);";
+            + TABLE_WIFI_DATA + "(" +
+            WIFIDATA_ID + " integer primary key autoincrement, " +
+            WIFIDATA_SSID + " text not null, " +
+            WIFIDATA_SSID_ASSOCIATED_NAME + " text not null);";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,12 +51,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
+        database.execSQL(DATABASE_CREATE_NOTE_TABLE);
         database.execSQL(DATABASE_CREATE_WIFI_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTE_DATA);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WIFI_DATA);
         onCreate(db);
     }
 }

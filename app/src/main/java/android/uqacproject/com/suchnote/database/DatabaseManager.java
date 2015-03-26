@@ -19,13 +19,16 @@ public class DatabaseManager {
     private SQLiteDatabase mDatabase;
     private DatabaseHelper mDatabaseHelper;
 
+    private String[] noteTable_allColumns = {
+            DatabaseHelper.NOTEDATA_ID,
+            DatabaseHelper.NOTEDATA_FILENAME,
+            DatabaseHelper.NOTEDATA_NOTETYPE,
+            DatabaseHelper.NOTEDATA_SSID_ASSOCIATED_NAME,
+            DatabaseHelper.NOTEDATA_PREFERENCE};
+
     private String[] wifiTable_allColumns = {
-            DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_FILENAME,
-            DatabaseHelper.COLUMN_NOTETYPE,
-            DatabaseHelper.COLUMN_SSID,
-            DatabaseHelper.COLUMN_SSID_ASSOCIATED_NAME,
-            DatabaseHelper.COLUMN_PREFERENCE};
+            DatabaseHelper.WIFIDATA_SSID,
+            DatabaseHelper.WIFIDATA_SSID_ASSOCIATED_NAME};
 
     public DatabaseManager(Context context) {
         mDatabaseHelper = new DatabaseHelper(context);
@@ -40,17 +43,24 @@ public class DatabaseManager {
         mDatabaseHelper.close();
     }
 
-    public void addWifiInfo(NoteInformation noteInfo) {
+    public void addNoteInfo(NoteInformation noteInfo) {
 
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_FILENAME, noteInfo.getFilename());
-        values.put(DatabaseHelper.COLUMN_NOTETYPE, noteInfo.getNotetype());
-        values.put(DatabaseHelper.COLUMN_SSID, noteInfo.getSsid());
-        values.put(DatabaseHelper.COLUMN_SSID_ASSOCIATED_NAME, noteInfo.getAssociatedName());
+        values.put(DatabaseHelper.NOTEDATA_FILENAME, noteInfo.getFilename());
+        values.put(DatabaseHelper.NOTEDATA_NOTETYPE, noteInfo.getNotetype());
+        values.put(DatabaseHelper.NOTEDATA_SSID_ASSOCIATED_NAME, noteInfo.getAssociatedName());
         mDatabase.insert(DatabaseHelper.TABLE_NOTE_DATA, null, values);
     }
 
-    private NoteInformation cursorToWifiInfo(Cursor cursor) {
+    public void addWifiInfo(String ssid, String associatedName){
+
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.WIFIDATA_SSID, ssid);
+        values.put(DatabaseHelper.WIFIDATA_SSID_ASSOCIATED_NAME, associatedName);
+        mDatabase.insert(DatabaseHelper.TABLE_WIFI_DATA, null, values);
+    }
+
+    private NoteInformation cursorToNoteInfo(Cursor cursor) {
         NoteInformation info = new NoteInformation();
         info.setId(cursor.getLong(0));
         info.setFilename(cursor.getString(1));
@@ -60,25 +70,49 @@ public class DatabaseManager {
         return info;
     }
 
-    public void deleteWifiInfo(NoteInformation noteInfo) {
+    public void deleteNoteInfo(NoteInformation noteInfo) {
         long id = noteInfo.getId();
-        mDatabase.delete(DatabaseHelper.TABLE_NOTE_DATA, DatabaseHelper.COLUMN_ID
+        mDatabase.delete(DatabaseHelper.TABLE_NOTE_DATA, DatabaseHelper.NOTEDATA_ID
                 + " = " + id, null);
     }
 
-    public void deleteAllWifiInformation(){
+    public void deleteWifiInfo(String ssid) {
+        mDatabase.delete(DatabaseHelper.TABLE_WIFI_DATA, DatabaseHelper.WIFIDATA_SSID
+                + " = " + ssid, null);
+    }
+
+    public void deleteAllNoteInformation(){
         mDatabase.delete(DatabaseHelper.TABLE_NOTE_DATA, null, null);
     }
 
-    public List<NoteInformation> getAllWifiInformation() {
+    public void deleteAllWifiInformation(){
+        mDatabase.delete(DatabaseHelper.TABLE_WIFI_DATA, null, null);
+    }
+
+    public String getWifiAssociatedName(String ssid){
+
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_WIFI_DATA +
+                " WHERE " + DatabaseHelper.WIFIDATA_SSID + " = ?";
+
+        Cursor cursor = mDatabase.rawQuery(selectQuery, new String[]{ssid}, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+            return cursor.getString(2);
+        }
+
+        return null;
+    }
+
+    public List<NoteInformation> getAllNoteInformation() {
         List<NoteInformation> infos = new ArrayList<NoteInformation>();
 
         Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_NOTE_DATA,
-                wifiTable_allColumns, null, null, null, null, null);
+                noteTable_allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            NoteInformation info = cursorToWifiInfo(cursor);
+            NoteInformation info = cursorToNoteInfo(cursor);
             infos.add(info);
             cursor.moveToNext();
         }
