@@ -7,7 +7,7 @@
         android:id="@+id/top_rectangle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_top_rectangle"
-        android:background="@color/accent_color"/>
+        android:background="@color/main_color"/>
 
     <TextView
         android:layout_width="wrap_content"

@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="accent_color">#00FF00</color>
-    <color name="fab_color_1">#FF0000</color>
+    <color name="main_color">#424242</color>
+    <color name="accent_color">#26C6DA</color>
     <color name="accent_color_negative">#FFFFFF</color>
+
+    <color name="main_text">#424242</color>
+
+    <color name="fab_color_1">@color/accent_color</color>
+
     <color name="round_button_pressed">#0000FF</color>
     <color name="round_button">#FFFFFF</color>
+    <color name="date_color">#CCC</color>
+
 
 </resources>
