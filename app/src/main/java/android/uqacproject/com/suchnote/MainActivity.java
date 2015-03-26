@@ -11,6 +11,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -33,10 +34,21 @@ import java.util.HashMap;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
+    public final static int MODE_NUMBER = 4;
+
     public final static int TEXT_NOTE = 0;
     public final static int AUDIO_NOTE = 1;
     public final static int PHOTO_NOTE = 2;
     public final static int VIDEO_NOTE = 3;
+
+    public final static String SENSOR_VALUES = "sensor_values";
+
+    public final static int SENSOR_NUMBER = 3;
+
+    public final static int LIGHT_SENSOR = 0;
+    public final static int SOUND_SENSOR = 1;
+    public final static int SPEED_SENSOR = 2;
+
 
     private Context mContext;
 
@@ -47,6 +59,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mLightSensor;
     private WifiManager mWifiManager;
+    private AudioManager mAudioManager;
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
 
@@ -58,15 +71,29 @@ public class MainActivity extends Activity implements SensorEventListener {
         mContext = this;
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new SamplePagerAdapter());
+        mViewPager.setAdapter(new NotePagerAdapter());
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
 
-        // TODO remove or update actionbar
-        //final ActionBar mActionBar = getActionBar();
-        //mActionBar.setDisplayShowTitleEnabled(false);
-        //mActionBar.setDisplayHomeAsUpEnabled(true);
-        //mActionBar.setHomeButtonEnabled(true);
+        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.fab_1);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                DialogFragment f = new SelectorDialogFragment();
+
+                float[] fakeValues = new float[SENSOR_NUMBER];
+                fakeValues[LIGHT_SENSOR] = 10f;
+                fakeValues[SOUND_SENSOR] = 0f;
+                fakeValues[SPEED_SENSOR] = 5f;
+
+                Bundle b = new Bundle();
+                b.putFloatArray(SENSOR_VALUES, fakeValues);
+                f.setArguments(b);
+
+                f.show(fm,"selector_fragment");
+            }
+        });
 
         initSensors();
     }
@@ -93,6 +120,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         return super.onOptionsItemSelected(item);
     }
 
+    @Deprecated
     public void launchDialogFragment(int dialogFragmentId) {
 
         FragmentManager fm = getFragmentManager();
@@ -142,9 +170,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
 
     private void initSensors() {
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mWifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -180,8 +210,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-
-    class SamplePagerAdapter extends PagerAdapter {
+    class NotePagerAdapter extends PagerAdapter {
 
         private ListView mListView;
         private NoteArrayAdapter mNoteAdapter;

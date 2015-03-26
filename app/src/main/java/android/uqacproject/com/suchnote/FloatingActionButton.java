@@ -20,7 +20,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-
 public class FloatingActionButton extends FrameLayout {
 
     private static final String TAG = "FloatingActionButton";
@@ -42,14 +41,5 @@ public class FloatingActionButton extends FrameLayout {
         super(context, attrs, defStyleAttr);
 
         setClickable(true);
-    }
-
-    /**
-     * Override performClick() so that we can toggle the checked state when the view is clicked
-     */
-    @Override
-    public boolean performClick() {
-        // TODO pop selectionFragment
-        return super.performClick();
     }
 }

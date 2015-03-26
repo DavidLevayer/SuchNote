@@ -3,5 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_top_rectangle">150dp</dimen>
-    <dimen name="basic_fragment_title_size">35sp</dimen>
+    <dimen name="title_size">35sp</dimen>
+    <dimen name="subtitle_size">25sp</dimen>
 </resources>
