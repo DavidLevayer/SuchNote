@@ -21,8 +21,10 @@ public class DatabaseManager {
 
     private String[] wifiTable_allColumns = {
             DatabaseHelper.COLUMN_ID,
-            DatabaseHelper.COLUMN_NAME,
+            DatabaseHelper.COLUMN_FILENAME,
+            DatabaseHelper.COLUMN_NOTETYPE,
             DatabaseHelper.COLUMN_SSID,
+            DatabaseHelper.COLUMN_SSID_ASSOCIATED_NAME,
             DatabaseHelper.COLUMN_PREFERENCE};
 
     public DatabaseManager(Context context) {
@@ -38,95 +40,50 @@ public class DatabaseManager {
         mDatabaseHelper.close();
     }
 
-    public void addWifiInfo(MyWifiInfo wifi) {
+    public void addWifiInfo(NoteInformation noteInfo) {
 
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_NAME, wifi.getAssociatedName());
-        values.put(DatabaseHelper.COLUMN_SSID, wifi.getSsid());
-        values.put(DatabaseHelper.COLUMN_PREFERENCE, wifi.getPreference());
-
-        mDatabase.insert(DatabaseHelper.TABLE_WIFI_DATA, null, values);
+        values.put(DatabaseHelper.COLUMN_FILENAME, noteInfo.getFilename());
+        values.put(DatabaseHelper.COLUMN_NOTETYPE, noteInfo.getNotetype());
+        values.put(DatabaseHelper.COLUMN_SSID, noteInfo.getSsid());
+        values.put(DatabaseHelper.COLUMN_SSID_ASSOCIATED_NAME, noteInfo.getAssociatedName());
+        mDatabase.insert(DatabaseHelper.TABLE_NOTE_DATA, null, values);
     }
 
-    private MyWifiInfo cursorToWifiInfo(Cursor cursor) {
-        MyWifiInfo info = new MyWifiInfo();
+    private NoteInformation cursorToWifiInfo(Cursor cursor) {
+        NoteInformation info = new NoteInformation();
         info.setId(cursor.getLong(0));
-        info.setAssociatedName(cursor.getString(1));
-        info.setSsid(cursor.getString(2));
-        info.setPreference(cursor.getString(3));
+        info.setFilename(cursor.getString(1));
+        info.setNotetype(cursor.getString(2));
+        info.setSsid(cursor.getString(3));
+        info.setAssociatedName(cursor.getString(4));
         return info;
     }
 
-    public void deleteWifiInfo(MyWifiInfo wifiInfo) {
-        long id = wifiInfo.getId();
-        mDatabase.delete(DatabaseHelper.TABLE_WIFI_DATA, DatabaseHelper.COLUMN_ID
+    public void deleteWifiInfo(NoteInformation noteInfo) {
+        long id = noteInfo.getId();
+        mDatabase.delete(DatabaseHelper.TABLE_NOTE_DATA, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
     }
 
     public void deleteAllWifiInformation(){
-        mDatabase.delete(DatabaseHelper.TABLE_WIFI_DATA, null, null);
+        mDatabase.delete(DatabaseHelper.TABLE_NOTE_DATA, null, null);
     }
 
-    public List<MyWifiInfo> getAllWifiInformation() {
-        List<MyWifiInfo> infos = new ArrayList<MyWifiInfo>();
+    public List<NoteInformation> getAllWifiInformation() {
+        List<NoteInformation> infos = new ArrayList<NoteInformation>();
 
-        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_WIFI_DATA,
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_NOTE_DATA,
                 wifiTable_allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            MyWifiInfo comment = cursorToWifiInfo(cursor);
-            infos.add(comment);
+            NoteInformation info = cursorToWifiInfo(cursor);
+            infos.add(info);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
         return infos;
-    }
-
-    public class MyWifiInfo {
-
-        private long id;
-        private String ssid, associatedName,preference;
-
-        public MyWifiInfo(){}
-
-        public MyWifiInfo(String ssid, String associatedName, String preference){
-            this.ssid = ssid;
-            this.associatedName = associatedName;
-            this.preference = preference;
-        }
-
-        public void setId(long id){
-            this.id = id;
-        }
-
-        public void setSsid(String ssid) {
-            this.ssid = ssid;
-        }
-
-        public void setAssociatedName(String associatedName) {
-            this.associatedName = associatedName;
-        }
-
-        public void setPreference(String preference) {
-            this.preference = preference;
-        }
-
-        public long getId(){
-            return id;
-        }
-
-        public String getSsid() {
-            return ssid;
-        }
-
-        public String getAssociatedName() {
-            return associatedName;
-        }
-
-        public String getPreference() {
-            return preference;
-        }
     }
 }
