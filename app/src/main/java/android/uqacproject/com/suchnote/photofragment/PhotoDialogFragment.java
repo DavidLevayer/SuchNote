@@ -1,103 +1,103 @@
 package android.uqacproject.com.suchnote.photofragment;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.hardware.Camera;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-import android.uqacproject.com.suchnote.BasicDialogFragment;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.uqacproject.com.suchnote.FileManager;
+import android.uqacproject.com.suchnote.MainActivity;
+import android.uqacproject.com.suchnote.NoteDialogFragment;
 import android.uqacproject.com.suchnote.R;
+import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.Date;
 
 /**
  * Created by David Levayer on 23/03/15.
  */
-public class PhotoDialogFragment extends BasicDialogFragment  {
-
-    /* ---------------- */
-    private Camera mCamera;
-    private CameraPreview mPreview;
+public class PhotoDialogFragment extends NoteDialogFragment
+        implements DialogInterface.OnDismissListener {
 
     /* ---------------- */
     private View mView;
 
-   /* private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+    private String fileName;
 
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
+    private File currentImage;
 
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null){
-                return;
-            }
-
-            try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
-                fos.close();
-            } catch (FileNotFoundException e) {
-            } catch (IOException e) {
-            }
-        }
-    };*/
-
+    private  Button buttonSave;
 
     /* ---------------- */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.dialogfragment_photo, container, false);
 
-        boolean t = checkCameraHardware(getActivity());
-        mCamera = getCameraInstance();
-        mPreview = new CameraPreview(getActivity(), mCamera);
-        FrameLayout preview = (FrameLayout) mView.findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
+        Button button = (Button) mView.findViewById(R.id.button_capture_photo);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-        Button captureButton = (Button) mView.findViewById(R.id.button_capture);
-        /*captureButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // get an image from the camera
-                        mCamera.takePicture(null, null, mPicture);
-                    }
+                fileName = ((EditText)mView.findViewById(R.id.title_photo)).getText().toString();
+
+                if(fileName != null && !fileName.isEmpty()){
+                    Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    String filePath = FileManager.getPhotoFilePath(fileName);
+                    currentImage = new File(filePath);
+                    setNoteFilePath(filePath);
+                    Uri uriSavedImage = Uri.fromFile(currentImage);
+                    imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
+                    startActivityForResult(imageIntent,0);
                 }
-        );*/
+            }
+        });
 
+        buttonSave = (Button) mView.findViewById(R.id.button_save_photo);
 
+        buttonSave.setVisibility(View.GONE);
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                setNote(new NoteInformation(
+                        fileName,
+                        MainActivity.PHOTO_NOTE,
+                        null,
+                        new Date()));
+
+                dismiss();
+            }
+        });
         return mView;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (resultCode == getActivity().RESULT_OK) {
+                // Image captured and saved to fileUri specified in the Intent
 
-    /** A safe way to get an instance of the Camera object. */
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        }
-        catch (Exception e){
-            // Camera is not available (in use or does not exist)
-        }
-        return c; // returns null if camera is unavailable
-    }
+                Bitmap myBitmap = BitmapFactory.decodeFile(currentImage.getAbsolutePath());
+                ImageView image = (ImageView) mView.findViewById(R.id.imageViewPhoto);
+                image.setImageBitmap(myBitmap);
 
-    /** Check if this device has a camera */
-    private boolean checkCameraHardware(Context context) {
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-            // this device has a camera
-            return true;
-        } else {
-            // no camera on this device
-            return false;
-        }
+                buttonSave.setVisibility(View.VISIBLE);
+
+            } else if (resultCode == getActivity().RESULT_CANCELED) {
+                // User cancelled the image capture
+            } else {
+                // Image capture failed, advise user
+            }
+
     }
 
 }

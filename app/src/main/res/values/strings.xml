@@ -19,6 +19,8 @@
     <string name="button_3">Audio</string>
     <string name="button_4">Video</string>
 
+    <string name="banner_alt">Note Photo</string>
+
     <string name="smart_button">Prendre une note</string>
     <string name="activity_title">Blueprint</string>
     <string name="recommanded_mode">Mode recommandé</string>

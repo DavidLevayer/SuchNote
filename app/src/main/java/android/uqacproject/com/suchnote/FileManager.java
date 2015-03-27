@@ -45,6 +45,24 @@ public class FileManager {
         return FILE_PATH+AUDIO_DIRECTORY+filename;
     }
 
+    public static String getPhotoFilePath(String filename){
+
+        File folder = new File(FILE_PATH+PHOTO_DIRECTORY);
+        if(!folder.exists())
+            folder.mkdirs();
+
+        return FILE_PATH+PHOTO_DIRECTORY+filename;
+    }
+
+    public static String getVideoFilePath(String filename){
+
+        File folder = new File(FILE_PATH+VIDEO_DIRECTORY);
+        if(!folder.exists())
+            folder.mkdirs();
+
+        return FILE_PATH+VIDEO_DIRECTORY+filename;
+    }
+
     @Deprecated
     public static NoteInformation[] getNotes(int noteType){
         switch(noteType){
