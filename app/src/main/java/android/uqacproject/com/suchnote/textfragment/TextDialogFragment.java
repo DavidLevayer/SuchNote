@@ -45,17 +45,20 @@ public class TextDialogFragment extends BasicDialogFragment implements View.OnCl
 
         FileManager.saveText(mContext,filename,content);
 
-        DatabaseManager mDatabaseManager = new DatabaseManager(mContext);
+        String associatedName = "Réseau inconnu";
 
-        String associatedName = mDatabaseManager.getWifiAssociatedName(mSSID);
-
-        if(associatedName == null){
-            askAssociatedName(mContext,mSSID);
+        if(mSSID != null) {
+            DatabaseManager mDatabaseManager = new DatabaseManager(mContext);
+            mDatabaseManager.open();
             associatedName = mDatabaseManager.getWifiAssociatedName(mSSID);
         }
 
-        NoteInformation info = new NoteInformation(filename, String.valueOf(MainActivity.TEXT_NOTE), associatedName);
-        mDatabaseManager.addNoteInfo(info);
+        NoteInformation note = new NoteInformation(filename, MainActivity.TEXT_NOTE, associatedName);
+
+        DatabaseManager mDatabaseManager = new DatabaseManager(mContext);
+        mDatabaseManager.open();
+        mDatabaseManager.addNoteInfo(note);
+        mDatabaseManager.close();
 
         dismiss();
     }

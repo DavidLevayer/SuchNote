@@ -2,7 +2,7 @@ package android.uqacproject.com.suchnote;
 
 import android.content.Context;
 import android.os.Environment;
-import android.uqacproject.com.suchnote.videofragment.Note;
+import android.uqacproject.com.suchnote.database.NoteInformation;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,10 +13,10 @@ import java.io.FileOutputStream;
 public class FileManager {
 
     private final static String FILE_PATH = Environment.getExternalStorageDirectory().getPath();
-    private final static String TEXT_DIRECTORY = "/SuchText/text/";
-    private final static String AUDIO_DIRECTORY = "/SuchText/audio/";
-    private final static String PHOTO_DIRECTORY = "/SuchText/photo/";
-    private final static String VIDEO_DIRECTORY = "/SuchText/video/";
+    private final static String TEXT_DIRECTORY = "/SuchNote/text/";
+    private final static String AUDIO_DIRECTORY = "/SuchNote/audio/";
+    private final static String PHOTO_DIRECTORY = "/SuchNote/photo/";
+    private final static String VIDEO_DIRECTORY = "/SuchNote/video/";
 
     public static void saveText(Context context, String filename, String text){
         FileOutputStream outputStream;
@@ -45,7 +45,8 @@ public class FileManager {
         return FILE_PATH+AUDIO_DIRECTORY+filename;
     }
 
-    public static Note[] getNotes(int noteType){
+    @Deprecated
+    public static NoteInformation[] getNotes(int noteType){
         switch(noteType){
             case MainActivity.TEXT_NOTE:
                 return getNotes(FILE_PATH+TEXT_DIRECTORY);
@@ -60,7 +61,8 @@ public class FileManager {
         }
     }
 
-    private static Note[] getNotes(String dir){
+    @Deprecated
+    private static NoteInformation[] getNotes(String dir){
 
         File folder = new File(dir);
         String[] fileList = folder.list();
@@ -68,10 +70,13 @@ public class FileManager {
         if(fileList == null)
             return null;
 
-        Note[] notes = new Note[fileList.length];
+        NoteInformation[] notes = new NoteInformation[fileList.length];
 
-        for(int i=0; i<fileList.length; i++)
-            notes[i] = new Note(fileList[i],"suchPlace");
+        for(int i=0; i<fileList.length; i++) {
+            NoteInformation n = new NoteInformation();
+            n.setFilename(fileList[i]);
+            notes[i] = n;
+        }
 
         return notes;
     }

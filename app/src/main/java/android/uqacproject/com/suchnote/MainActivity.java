@@ -1,9 +1,11 @@
 package android.uqacproject.com.suchnote;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,18 +20,19 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.uqacproject.com.suchnote.audiofragment.AudioDialogFragment;
+import android.uqacproject.com.suchnote.database.DatabaseManager;
+import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.uqacproject.com.suchnote.photofragment.PhotoDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
-import android.uqacproject.com.suchnote.videofragment.Note;
 import android.uqacproject.com.suchnote.videofragment.VideoDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class MainActivity extends Activity implements SensorEventListener {
@@ -56,13 +59,14 @@ public class MainActivity extends Activity implements SensorEventListener {
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
 
-    private HashMap<Integer, Object> sensorValues;
     private SensorManager mSensorManager;
     private Sensor mLightSensor;
     private WifiManager mWifiManager;
     private AudioManager mAudioManager;
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
+
+    private DatabaseManager mDatabaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
                 Bundle b = new Bundle();
                 b.putFloatArray(SENSOR_VALUES, fakeValues);
+                b.putString(WIFI_SSID,mWifiManager.getConnectionInfo().getSSID());
                 f.setArguments(b);
 
                 f.show(fm,"selector_fragment");
@@ -148,16 +153,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onResume() {
         super.onResume();
 
-        if (sensorValues == null)
-            sensorValues = new HashMap<>();
-
         mSensorManager.registerListener(this, mLightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
-        String ssid = "none";
         if (mWifiInfo != null)
-            ssid = mWifiInfo.getSSID();
-        // TODO save l'id wifi
+            checkWifiInfo(mWifiInfo.getSSID());
 
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
     }
@@ -197,11 +197,49 @@ public class MainActivity extends Activity implements SensorEventListener {
         };
     }
 
+    private void checkWifiInfo(final String ssid){
+
+        mDatabaseManager = new DatabaseManager(this);
+
+        mDatabaseManager.open();
+        String associatedName = mDatabaseManager.getWifiAssociatedName(ssid);
+        mDatabaseManager.close();
+
+        // Si le réseau n'est pas connu, on demande des infos à l'utilisateur
+        if (associatedName == null) {
+
+            final EditText input = new EditText(this);
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Associer ce réseau Wifi")
+                    .setMessage("Donner un alias à cette connexion")
+                    .setView(input)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+
+                            String result = input.getText().toString();
+
+                            if (result != null && result.length() > 0){
+                                mDatabaseManager.open();
+                                mDatabaseManager.addWifiInfo(ssid,result);
+                                mDatabaseManager.close();
+                            }
+                        }
+                    })
+                    .setNegativeButton("Réseau inconnu", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            mDatabaseManager.open();
+                            mDatabaseManager.addWifiInfo(ssid,"Réseau inconnu");
+                            mDatabaseManager.close();
+                        }
+                    }).show();
+        }
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
             case Sensor.TYPE_LIGHT:
-                sensorValues.put(Sensor.TYPE_LIGHT, event.values[0]);
                 // TODO save la luminosité
                 break;
         }
@@ -250,7 +288,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                     container, false);
 
             mListView = (ListView) view.findViewById(R.id.note_listview);
-            mNoteAdapter = new NoteArrayAdapter(mContext, new ArrayList<Note>());
+            mNoteAdapter = new NoteArrayAdapter(mContext, new ArrayList<NoteInformation>());
             mListView.setAdapter(mNoteAdapter);
 
             // TODO Add element to the list
@@ -270,28 +308,32 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         private void loadNotes(int position){
 
-            Note[] mNotes = null;
+            NoteInformation[] mNotes = null;
+            mDatabaseManager.open();
+
             switch(position){
                 // Texte
                 case TEXT_NOTE:
-                    mNotes = FileManager.getNotes(TEXT_NOTE);
+                    mNotes = mDatabaseManager.getNoteInformation(TEXT_NOTE);
                     break;
                 // Audio
                 case AUDIO_NOTE:
-                    mNotes = FileManager.getNotes(AUDIO_NOTE);
+                    mNotes = mDatabaseManager.getNoteInformation(AUDIO_NOTE);
                     break;
                 // Photo
                 case PHOTO_NOTE:
-                    mNotes = FileManager.getNotes(PHOTO_NOTE);
+                    mNotes = mDatabaseManager.getNoteInformation(PHOTO_NOTE);
                     break;
                 // Vidéo
                 case VIDEO_NOTE:
-                    mNotes = FileManager.getNotes(VIDEO_NOTE);
+                    mNotes = mDatabaseManager.getNoteInformation(VIDEO_NOTE);
                     break;
             }
 
+            mDatabaseManager.close();
+
             if(mNotes != null){
-                for(Note n : mNotes)
+                for(NoteInformation n : mNotes)
                     mNoteAdapter.add(n);
             }
         }

@@ -1,7 +1,7 @@
 package android.uqacproject.com.suchnote;
 
 import android.content.Context;
-import android.uqacproject.com.suchnote.videofragment.Note;
+import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 /**
  * Created by David Levayer on 12/03/15.
  */
-public class NoteArrayAdapter extends ArrayAdapter<Note> {
+public class NoteArrayAdapter extends ArrayAdapter<NoteInformation> {
 
-    public NoteArrayAdapter(Context context, ArrayList<Note> objects) {
+    public NoteArrayAdapter(Context context, ArrayList<NoteInformation> objects) {
         super(context, 0, objects);
     }
 
@@ -23,7 +23,7 @@ public class NoteArrayAdapter extends ArrayAdapter<Note> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // On récupère la note à traiter
-        Note n = getItem(position);
+        NoteInformation n = getItem(position);
 
         // Si la vue ne peut pas être réutilisée, on la recrée
         if (convertView == null) {
@@ -33,8 +33,8 @@ public class NoteArrayAdapter extends ArrayAdapter<Note> {
                     false);
         }
 
-        ((TextView) convertView.findViewById(R.id.title)).setText(n.getName());
-        ((TextView) convertView.findViewById(R.id.place)).setText(n.getPlace());
+        ((TextView) convertView.findViewById(R.id.title)).setText(n.getFilename());
+        ((TextView) convertView.findViewById(R.id.place)).setText(n.getAssociatedName());
 
         return convertView;
     }

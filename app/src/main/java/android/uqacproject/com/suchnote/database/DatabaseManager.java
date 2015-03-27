@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by David Levayer on 26/03/15.
  */
@@ -64,7 +61,7 @@ public class DatabaseManager {
         NoteInformation info = new NoteInformation();
         info.setId(cursor.getLong(0));
         info.setFilename(cursor.getString(1));
-        info.setNotetype(cursor.getString(2));
+        info.setNotetype(cursor.getInt(2));
         info.setAssociatedName(cursor.getString(3));
         return info;
     }
@@ -95,27 +92,52 @@ public class DatabaseManager {
 
         Cursor cursor = mDatabase.rawQuery(selectQuery, new String[]{ssid}, null);
 
-        if(cursor != null){
+        if(cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
-            return cursor.getString(2);
+            String res = cursor.getString(2);
+            cursor.close();
+            return res;
+
         }
 
         return null;
     }
 
-    public List<NoteInformation> getAllNoteInformation() {
-        List<NoteInformation> infos = new ArrayList<NoteInformation>();
+    public NoteInformation[] getAllNoteInformation() {
 
         Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_NOTE_DATA,
                 noteTable_allColumns, null, null, null, null, null);
 
+        NoteInformation[] infos = new NoteInformation[cursor.getCount()];
+        int i = 0;
+
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             NoteInformation info = cursorToNoteInfo(cursor);
-            infos.add(info);
+            infos[i] = info;
             cursor.moveToNext();
         }
-        // make sure to close the cursor
+
+        cursor.close();
+        return infos;
+    }
+
+    public NoteInformation[] getNoteInformation(final int noteType){
+
+        Cursor cursor = mDatabase.query(DatabaseHelper.TABLE_NOTE_DATA,
+                noteTable_allColumns, DatabaseHelper.NOTEDATA_NOTETYPE + " = ?",
+                new String[]{String.valueOf(noteType)}, null, null, null);
+
+        NoteInformation[] infos = new NoteInformation[cursor.getCount()];
+        int i = 0;
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            NoteInformation info = cursorToNoteInfo(cursor);
+            infos[i] = info;
+            cursor.moveToNext();
+        }
+
         cursor.close();
         return infos;
     }

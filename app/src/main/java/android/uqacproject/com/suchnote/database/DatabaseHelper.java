@@ -11,6 +11,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NOTE_DATA = "notedata";
 
+    // TODO Ajouter la date
     public static final String NOTEDATA_ID = "_id";
     public static final String NOTEDATA_FILENAME = "filename";
     public static final String NOTEDATA_NOTETYPE = "notetype";
@@ -33,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_NOTE_DATA + "(" +
             NOTEDATA_ID + " integer primary key autoincrement, " +
             NOTEDATA_FILENAME + " text not null, " +
-            NOTEDATA_NOTETYPE + " text not null, " +
+            NOTEDATA_NOTETYPE + " integer, " +
             NOTEDATA_SSID_ASSOCIATED_NAME + " text, " +
             NOTEDATA_PREFERENCE + " text);";
 

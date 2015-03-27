@@ -6,11 +6,12 @@ package android.uqacproject.com.suchnote.database;
 public class NoteInformation {
 
     private long id;
-    private String filename, notetype, associatedName;
+    private String filename, associatedName;
+    private int notetype;
 
     public NoteInformation(){}
 
-    public NoteInformation(String filename, String noteType, String associatedName){
+    public NoteInformation(String filename, int noteType, String associatedName){
 
         this.filename = filename;
         this.notetype = notetype;
@@ -33,11 +34,11 @@ public class NoteInformation {
         this.filename = filename;
     }
 
-    public String getNotetype() {
+    public int getNotetype() {
         return notetype;
     }
 
-    public void setNotetype(String notetype) {
+    public void setNotetype(int notetype) {
         this.notetype = notetype;
     }
 
