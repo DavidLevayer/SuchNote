@@ -2,11 +2,10 @@ package android.uqacproject.com.suchnote.textfragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.uqacproject.com.suchnote.BasicDialogFragment;
 import android.uqacproject.com.suchnote.FileManager;
 import android.uqacproject.com.suchnote.MainActivity;
+import android.uqacproject.com.suchnote.NoteDialogFragment;
 import android.uqacproject.com.suchnote.R;
-import android.uqacproject.com.suchnote.database.DatabaseManager;
 import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +13,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.Date;
+
 /**
  * Created by David Levayer on 23/03/15.
  */
-public class TextDialogFragment extends BasicDialogFragment implements View.OnClickListener {
+public class TextDialogFragment extends NoteDialogFragment implements View.OnClickListener {
 
     private View mView;
     private Context mContext;
-    private String mSSID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,7 +30,6 @@ public class TextDialogFragment extends BasicDialogFragment implements View.OnCl
         mContext = getActivity();
 
         Bundle b = getArguments();
-        mSSID = b.getString(MainActivity.WIFI_SSID);
 
         Button sendButton = (Button) mView.findViewById(R.id.textButton);
         sendButton.setOnClickListener(this);
@@ -45,20 +44,11 @@ public class TextDialogFragment extends BasicDialogFragment implements View.OnCl
 
         FileManager.saveText(mContext,filename,content);
 
-        String associatedName = "Réseau inconnu";
-
-        if(mSSID != null) {
-            DatabaseManager mDatabaseManager = new DatabaseManager(mContext);
-            mDatabaseManager.open();
-            associatedName = mDatabaseManager.getWifiAssociatedName(mSSID);
-        }
-
-        NoteInformation note = new NoteInformation(filename, MainActivity.TEXT_NOTE, associatedName);
-
-        DatabaseManager mDatabaseManager = new DatabaseManager(mContext);
-        mDatabaseManager.open();
-        mDatabaseManager.addNoteInfo(note);
-        mDatabaseManager.close();
+        setNote(new NoteInformation(
+                filename,
+                MainActivity.TEXT_NOTE,
+                null,
+                new Date()));
 
         dismiss();
     }

@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String NOTEDATA_FILENAME = "filename";
     public static final String NOTEDATA_NOTETYPE = "notetype";
     public static final String NOTEDATA_SSID_ASSOCIATED_NAME = "ssidassociatedname";
-    public static final String NOTEDATA_PREFERENCE = "notemodepreference";
+    public static final String NOTEDATA_DATE = "notedatadate";
 
     public static final String TABLE_WIFI_DATA = "wifidata";
 
@@ -36,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             NOTEDATA_FILENAME + " text not null, " +
             NOTEDATA_NOTETYPE + " integer, " +
             NOTEDATA_SSID_ASSOCIATED_NAME + " text, " +
-            NOTEDATA_PREFERENCE + " text);";
+            NOTEDATA_DATE + " text not null);";
 
     // Création de la table Wifi dans la base de données
     private static final String DATABASE_CREATE_WIFI_TABLE = "create table "

@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -94,7 +95,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
                 Bundle b = new Bundle();
                 b.putFloatArray(SENSOR_VALUES, fakeValues);
-                b.putString(WIFI_SSID,mWifiManager.getConnectionInfo().getSSID());
                 f.setArguments(b);
 
                 f.show(fm,"selector_fragment");
@@ -249,7 +249,48 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
+    public void addNoteToList(NoteInformation note){
+
+        mViewPager.setCurrentItem(note.getNotetype());
+        String tag = NotePagerAdapter.VIEW_TAG + String.valueOf(note.getNotetype());
+        View view = mViewPager.findViewWithTag(tag);
+        ListView list = (ListView)view.findViewById(R.id.note_listview);
+        NoteArrayAdapter adapter = (NoteArrayAdapter) list.getAdapter();
+        adapter.add(note);
+    }
+
+    public void validateNote(NoteInformation note) {
+
+        DatabaseManager mDatabaseManager = new DatabaseManager(this);
+        mDatabaseManager.open();
+
+        if(note.getAssociatedName() == null){
+            String associatedName = "Réseau inconnu";
+            WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+            if (mWifiInfo != null)
+                associatedName = mDatabaseManager.getWifiAssociatedName(mWifiInfo.getSSID());
+
+            note.setAssociatedName(associatedName);
+        }
+
+        mDatabaseManager.addNoteInfo(note);
+        mDatabaseManager.close();
+
+        addNoteToList(note);
+    }
+
+    public void invalidateNote(String filepath) {
+
+        if (filepath != null) {
+            File f = new File(filepath);
+            if (f.exists())
+                f.delete();
+        }
+    }
+
     class NotePagerAdapter extends PagerAdapter {
+
+        public final static String VIEW_TAG = "notePagerAdapterViewTag";
 
         private ListView mListView;
         private NoteArrayAdapter mNoteAdapter;
@@ -286,6 +327,9 @@ public class MainActivity extends Activity implements SensorEventListener {
             // Inflate a new layout from our resources
             View view = getLayoutInflater().inflate(R.layout.activity_main_list,
                     container, false);
+
+            String tag = VIEW_TAG + String.valueOf(position);
+            view.setTag(tag);
 
             mListView = (ListView) view.findViewById(R.id.note_listview);
             mNoteAdapter = new NoteArrayAdapter(mContext, new ArrayList<NoteInformation>());

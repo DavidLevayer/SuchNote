@@ -1,5 +1,7 @@
 package android.uqacproject.com.suchnote.database;
 
+import java.util.Date;
+
 /**
  * Created by David Levayer on 26/03/15.
  */
@@ -7,15 +9,17 @@ public class NoteInformation {
 
     private long id;
     private String filename, associatedName;
-    private int notetype;
+    private int noteType;
+    private Date date;
 
     public NoteInformation(){}
 
-    public NoteInformation(String filename, int noteType, String associatedName){
+    public NoteInformation(String filename, int noteType, String associatedName, Date date){
 
         this.filename = filename;
-        this.notetype = notetype;
+        this.noteType = noteType;
         this.associatedName = associatedName;
+        this.date = date;
     }
 
     public long getId() {
@@ -35,11 +39,11 @@ public class NoteInformation {
     }
 
     public int getNotetype() {
-        return notetype;
+        return noteType;
     }
 
     public void setNotetype(int notetype) {
-        this.notetype = notetype;
+        this.noteType = notetype;
     }
 
     public String getAssociatedName() {
@@ -48,5 +52,13 @@ public class NoteInformation {
 
     public void setAssociatedName(String associatedName) {
         this.associatedName = associatedName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

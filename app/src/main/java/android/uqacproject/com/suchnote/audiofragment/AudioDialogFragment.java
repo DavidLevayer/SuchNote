@@ -1,11 +1,14 @@
 package android.uqacproject.com.suchnote.audiofragment;
 
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.uqacproject.com.suchnote.BasicDialogFragment;
 import android.uqacproject.com.suchnote.FileManager;
+import android.uqacproject.com.suchnote.MainActivity;
+import android.uqacproject.com.suchnote.NoteDialogFragment;
 import android.uqacproject.com.suchnote.R;
+import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +17,16 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Created by David Levayer on 23/03/15.
  */
-public class AudioDialogFragment extends BasicDialogFragment {
+public class AudioDialogFragment extends NoteDialogFragment
+        implements DialogInterface.OnDismissListener {
 
     private View mView;
-    private Button start, stop, play;
+    private Button start, stop, play, validate;
 
     private MediaPlayer mPlayer = null;
     private MediaRecorder mRecorder = null;
@@ -55,8 +60,24 @@ public class AudioDialogFragment extends BasicDialogFragment {
             }
         });
 
+        validate = (Button) mView.findViewById(R.id.validate);
+        validate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String filename = ((EditText)mView.findViewById(R.id.title)).getText().toString();
+                setNote(new NoteInformation(
+                        filename,
+                        MainActivity.AUDIO_NOTE,
+                        null,
+                        new Date()));
+                dismiss();
+            }
+        });
+
         stop.setEnabled(false);
         play.setEnabled(false);
+        validate.setEnabled(false);
+
         return mView;
     }
 
@@ -71,6 +92,8 @@ public class AudioDialogFragment extends BasicDialogFragment {
         mFilename = FileManager.getAudioFilePath(filename);
         mRecorder.setOutputFile(mFilename);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        setNoteFilePath(mFilename);
 
         try {
             mRecorder.prepare();
@@ -88,6 +111,7 @@ public class AudioDialogFragment extends BasicDialogFragment {
         start.setEnabled(true);
         stop.setEnabled(false);
         play.setEnabled(true);
+        validate.setEnabled(true);
     }
 
     private void playRecording(){
@@ -100,4 +124,6 @@ public class AudioDialogFragment extends BasicDialogFragment {
             Log.e("Audio", "prepare() failed");
         }
     }
+
+
 }

@@ -18,7 +18,6 @@ import android.widget.Button;
 public class SelectorDialogFragment extends BasicDialogFragment {
 
     private View mView;
-    private String mSSID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,7 +27,6 @@ public class SelectorDialogFragment extends BasicDialogFragment {
 
         Bundle b = getArguments();
         float[] sensorValues = b.getFloatArray(MainActivity.SENSOR_VALUES);
-        mSSID = b.getString(MainActivity.WIFI_SSID);
 
         String[] modeNames = getResources().getStringArray(R.array.activity_tabs);
         int[] modeScores = evaluateModes(sensorValues);
@@ -145,9 +143,6 @@ public class SelectorDialogFragment extends BasicDialogFragment {
                 break;
             default:
                 f = new TextDialogFragment();
-                Bundle b = new Bundle();
-                b.putString(MainActivity.WIFI_SSID, mSSID);
-                f.setArguments(b);
                 break;
         }
 

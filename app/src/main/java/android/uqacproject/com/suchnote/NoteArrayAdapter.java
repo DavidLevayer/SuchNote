@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by David Levayer on 12/03/15.
@@ -35,6 +37,13 @@ public class NoteArrayAdapter extends ArrayAdapter<NoteInformation> {
 
         ((TextView) convertView.findViewById(R.id.title)).setText(n.getFilename());
         ((TextView) convertView.findViewById(R.id.place)).setText(n.getAssociatedName());
+
+        Date d = n.getDate();
+
+        String day = new SimpleDateFormat("dd").format(d);
+        String month = new SimpleDateFormat("MMMM").format(d);
+        ((TextView) convertView.findViewById(R.id.day)).setText(day);
+        ((TextView) convertView.findViewById(R.id.month)).setText(month);
 
         return convertView;
     }

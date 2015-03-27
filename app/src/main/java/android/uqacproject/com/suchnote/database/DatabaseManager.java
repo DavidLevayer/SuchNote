@@ -4,6 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by David Levayer on 26/03/15.
@@ -21,7 +25,7 @@ public class DatabaseManager {
             DatabaseHelper.NOTEDATA_FILENAME,
             DatabaseHelper.NOTEDATA_NOTETYPE,
             DatabaseHelper.NOTEDATA_SSID_ASSOCIATED_NAME,
-            DatabaseHelper.NOTEDATA_PREFERENCE};
+            DatabaseHelper.NOTEDATA_DATE};
 
     private String[] wifiTable_allColumns = {
             DatabaseHelper.WIFIDATA_SSID,
@@ -46,6 +50,7 @@ public class DatabaseManager {
         values.put(DatabaseHelper.NOTEDATA_FILENAME, noteInfo.getFilename());
         values.put(DatabaseHelper.NOTEDATA_NOTETYPE, noteInfo.getNotetype());
         values.put(DatabaseHelper.NOTEDATA_SSID_ASSOCIATED_NAME, noteInfo.getAssociatedName());
+        values.put(DatabaseHelper.NOTEDATA_DATE, new SimpleDateFormat("dd MM yyyy HH:mm:ss").format(noteInfo.getDate()));
         mDatabase.insert(DatabaseHelper.TABLE_NOTE_DATA, null, values);
     }
 
@@ -63,6 +68,11 @@ public class DatabaseManager {
         info.setFilename(cursor.getString(1));
         info.setNotetype(cursor.getInt(2));
         info.setAssociatedName(cursor.getString(3));
+        try {
+            info.setDate(new SimpleDateFormat("dd MM yyyy HH:mm:ss").parse(cursor.getString(4)));
+        } catch (ParseException e) {
+            Toast.makeText(mContext,"Invalid date format",Toast.LENGTH_LONG).show();
+        }
         return info;
     }
 
