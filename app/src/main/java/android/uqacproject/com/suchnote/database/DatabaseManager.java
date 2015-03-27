@@ -65,8 +65,7 @@ public class DatabaseManager {
         info.setId(cursor.getLong(0));
         info.setFilename(cursor.getString(1));
         info.setNotetype(cursor.getString(2));
-        info.setSsid(cursor.getString(3));
-        info.setAssociatedName(cursor.getString(4));
+        info.setAssociatedName(cursor.getString(3));
         return info;
     }
 

@@ -6,15 +6,14 @@ package android.uqacproject.com.suchnote.database;
 public class NoteInformation {
 
     private long id;
-    private String filename, notetype, ssid, associatedName;
+    private String filename, notetype, associatedName;
 
     public NoteInformation(){}
 
-    public NoteInformation(String filename, String noteType,
-                           String ssid, String associatedName){
+    public NoteInformation(String filename, String noteType, String associatedName){
+
         this.filename = filename;
         this.notetype = notetype;
-        this.ssid = ssid;
         this.associatedName = associatedName;
     }
 
@@ -40,14 +39,6 @@ public class NoteInformation {
 
     public void setNotetype(String notetype) {
         this.notetype = notetype;
-    }
-
-    public String getSsid() {
-        return ssid;
-    }
-
-    public void setSsid(String ssid) {
-        this.ssid = ssid;
     }
 
     public String getAssociatedName() {

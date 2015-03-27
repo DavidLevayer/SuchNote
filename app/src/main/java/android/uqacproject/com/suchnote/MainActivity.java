@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     public final static int SOUND_SENSOR = 1;
     public final static int SPEED_SENSOR = 2;
 
+    public final static String WIFI_SSID = "ssidbundlekey";
 
     private Context mContext;
 
