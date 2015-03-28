@@ -51,7 +51,10 @@
         android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_below="@id/button_capture_video"/>
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:layout_below="@id/button_capture_video"
+        android:contentDescription="@string/banner_alt" />
 
     <Button
         android:id="@+id/button_start_preview_video"

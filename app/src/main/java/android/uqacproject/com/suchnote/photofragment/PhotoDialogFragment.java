@@ -37,6 +37,8 @@ public class PhotoDialogFragment extends NoteDialogFragment
 
     private  Button buttonSave;
 
+    private ImageView myPhotoView;
+
     /* ---------------- */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +79,9 @@ public class PhotoDialogFragment extends NoteDialogFragment
             }
         });
 
+        myPhotoView = (ImageView) mView.findViewById(R.id.imageViewPhoto);
+        myPhotoView.setVisibility(View.GONE);
+
         Button autoTitle = (Button) mView.findViewById(R.id.autoTitle);
         autoTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,8 +99,10 @@ public class PhotoDialogFragment extends NoteDialogFragment
                 // Image captured and saved to fileUri specified in the Intent
 
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentImage.getAbsolutePath());
-                ImageView image = (ImageView) mView.findViewById(R.id.imageViewPhoto);
-                image.setImageBitmap(myBitmap);
+                myPhotoView = (ImageView) mView.findViewById(R.id.imageViewPhoto);
+                myPhotoView.setImageBitmap(myBitmap);
+
+                myPhotoView.setVisibility(View.VISIBLE);
 
                 buttonSave.setVisibility(View.VISIBLE);
 
