@@ -256,7 +256,8 @@ public class MainActivity extends Activity implements SensorEventListener {
             View view = mViewPager.findViewWithTag(tag);
             ListView list = (ListView)view.findViewById(R.id.note_listview);
             NoteArrayAdapter adapter = (NoteArrayAdapter) list.getAdapter();
-            adapter.add(note);
+            //adapter.add(note);
+            adapter.insert(note,0);
         }
         mViewPager.setCurrentItem(note.getNotetype());
     }
