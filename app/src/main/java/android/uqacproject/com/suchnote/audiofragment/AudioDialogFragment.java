@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Date;
@@ -94,22 +95,29 @@ public class AudioDialogFragment extends NoteDialogFragment
         stop.setEnabled(true);
 
         String filename = ((EditText)mView.findViewById(R.id.title)).getText().toString();
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mFilename = FileManager.getAudioFilePath(filename);
-        mRecorder.setOutputFile(mFilename);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
-        setNoteFilePath(mFilename);
+        if(filename != null && !filename.isEmpty()){
 
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            Log.e("Audio", "prepare() failed");
+            mRecorder = new MediaRecorder();
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mFilename = FileManager.getAudioFilePath(filename);
+            mRecorder.setOutputFile(mFilename);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+            setNoteFilePath(mFilename);
+
+            try {
+                mRecorder.prepare();
+            } catch (IOException e) {
+                Log.e("Audio", "prepare() failed");
+            }
+
+            mRecorder.start();
+
+        } else {
+            Toast.makeText(getActivity(), "Titre invalide", Toast.LENGTH_SHORT).show();
         }
-
-        mRecorder.start();
     }
 
     private void stopRecording(){
