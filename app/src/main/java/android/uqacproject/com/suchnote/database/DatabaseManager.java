@@ -146,6 +146,7 @@ public class DatabaseManager {
             NoteInformation info = cursorToNoteInfo(cursor);
             infos[i] = info;
             cursor.moveToNext();
+            i++;
         }
 
         cursor.close();
