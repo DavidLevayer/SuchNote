@@ -26,7 +26,8 @@
         android:gravity="center"
         android:focusable="true"/>
 
-    <FrameLayout
+    <Button
+        android:id="@+id/autoTitle"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_toRightOf="@id/title"
@@ -35,8 +36,7 @@
         android:layout_marginLeft="-35dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:background="@drawable/ic_text"
-        android:onClick="addNoteTitle"/>
+        android:background="@drawable/ic_text"/>
 
     <EditText
         android:id="@+id/textArea"

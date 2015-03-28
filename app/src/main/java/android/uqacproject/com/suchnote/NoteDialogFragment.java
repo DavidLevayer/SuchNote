@@ -3,6 +3,11 @@ package android.uqacproject.com.suchnote;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.uqacproject.com.suchnote.database.NoteInformation;
+import android.view.View;
+import android.widget.EditText;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by David Levayer on 27/03/15.
@@ -32,6 +37,13 @@ public class NoteDialogFragment extends BasicDialogFragment {
 
     public boolean isValidated(){
         return note == null;
+    }
+
+    public void addNoteTitle (View v) {
+        EditText title = (EditText)v.findViewById(R.id.title);
+        String text = "Note de "+ new SimpleDateFormat("HH:mm").format(new Date());
+        title.setText(text);
+        title.clearFocus();
     }
 
     @Override

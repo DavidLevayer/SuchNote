@@ -34,6 +34,14 @@ public class TextDialogFragment extends NoteDialogFragment implements View.OnCli
         Button sendButton = (Button) mView.findViewById(R.id.textButton);
         sendButton.setOnClickListener(this);
 
+        Button autoTitle = (Button) mView.findViewById(R.id.autoTitle);
+        autoTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNoteTitle(v.getRootView());
+            }
+        });
+
         return mView;
     }
 
