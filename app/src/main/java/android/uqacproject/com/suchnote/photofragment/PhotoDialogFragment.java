@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.uqacproject.com.suchnote.FileManager;
 import android.uqacproject.com.suchnote.MainActivity;
@@ -19,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.Date;
@@ -48,7 +46,7 @@ public class PhotoDialogFragment extends NoteDialogFragment
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                fileName = ((EditText)mView.findViewById(R.id.title_photo)).getText().toString();
+                fileName = ((EditText)mView.findViewById(R.id.title)).getText().toString();
 
                 if(fileName != null && !fileName.isEmpty()){
                     Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -78,6 +76,15 @@ public class PhotoDialogFragment extends NoteDialogFragment
                 dismiss();
             }
         });
+
+        Button autoTitle = (Button) mView.findViewById(R.id.autoTitle);
+        autoTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNoteTitle(v.getRootView());
+            }
+        });
+
         return mView;
     }
 
