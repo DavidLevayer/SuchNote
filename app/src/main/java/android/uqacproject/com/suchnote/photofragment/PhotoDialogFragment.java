@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.Date;
@@ -58,6 +59,8 @@ public class PhotoDialogFragment extends NoteDialogFragment
                     Uri uriSavedImage = Uri.fromFile(currentImage);
                     imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                     startActivityForResult(imageIntent,0);
+                } else {
+                    Toast.makeText(getActivity(), "Titre invalide", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.File;
@@ -67,6 +68,8 @@ public class VideoDialogFragment  extends NoteDialogFragment
                     Uri uriSavedVideo = Uri.fromFile(currentVideo);
                     videoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedVideo);
                     startActivityForResult(videoIntent,0);
+                } else {
+                    Toast.makeText(getActivity(),"Titre invalide", Toast.LENGTH_SHORT).show();
                 }
             }
         });
