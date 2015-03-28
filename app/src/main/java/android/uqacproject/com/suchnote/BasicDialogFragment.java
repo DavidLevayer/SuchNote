@@ -11,7 +11,7 @@ import android.view.Window;
  */
 public class BasicDialogFragment extends DialogFragment {
 
-    protected static float dialogSize = 0.7f;
+    protected static float dialogSize = 0.8f;
 
     public BasicDialogFragment() { }
 
