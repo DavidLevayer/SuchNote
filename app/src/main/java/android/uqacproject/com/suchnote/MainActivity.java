@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -247,6 +248,11 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public void addNoteTitle (View view) {
+        // TODO generate automatic title
+        Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
     }
 
     public void addNoteToList(NoteInformation note){

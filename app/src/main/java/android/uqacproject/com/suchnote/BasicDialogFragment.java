@@ -11,7 +11,7 @@ import android.view.Window;
  */
 public class BasicDialogFragment extends DialogFragment {
 
-    protected static float dialogSize = 0.8f;
+    protected static float dialogSize = 0.7f;
 
     public BasicDialogFragment() { }
 
@@ -35,10 +35,11 @@ public class BasicDialogFragment extends DialogFragment {
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int dialogHeight = (int)(displaymetrics.heightPixels * dialogSize);
+        //int dialogHeight = (int)(displaymetrics.heightPixels * dialogSize);
         int dialogWidth = (int)(displaymetrics.widthPixels * dialogSize);
 
-        getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
-
+        //getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+        Window dialogWindow = getDialog().getWindow();
+        dialogWindow.setLayout(dialogWidth, dialogWindow.getAttributes().height);
     }
 }
