@@ -50,6 +50,7 @@ public class NoteDialogFragment extends BasicDialogFragment {
     public void onDismiss(final DialogInterface dialog) {
         super.onDismiss(dialog);
         if(!cancelled) {
+            cancelled = true;
             final Activity activity = getActivity();
             if (activity != null && activity instanceof MainActivity) {
                 ((MainActivity) activity).validateNote(note);

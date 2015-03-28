@@ -31,12 +31,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class MainActivity extends Activity implements SensorEventListener {
@@ -254,12 +251,14 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     public void addNoteToList(NoteInformation note){
 
+        if(Math.abs(mViewPager.getCurrentItem()-note.getNotetype())<=1){
+            String tag = NotePagerAdapter.VIEW_TAG + String.valueOf(note.getNotetype());
+            View view = mViewPager.findViewWithTag(tag);
+            ListView list = (ListView)view.findViewById(R.id.note_listview);
+            NoteArrayAdapter adapter = (NoteArrayAdapter) list.getAdapter();
+            adapter.add(note);
+        }
         mViewPager.setCurrentItem(note.getNotetype());
-        String tag = NotePagerAdapter.VIEW_TAG + String.valueOf(note.getNotetype());
-        View view = mViewPager.findViewWithTag(tag);
-        ListView list = (ListView)view.findViewById(R.id.note_listview);
-        NoteArrayAdapter adapter = (NoteArrayAdapter) list.getAdapter();
-        adapter.add(note);
     }
 
     public void validateNote(NoteInformation note) {
