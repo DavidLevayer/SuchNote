@@ -78,6 +78,14 @@ public class AudioDialogFragment extends NoteDialogFragment
         play.setEnabled(false);
         validate.setEnabled(false);
 
+        Button autoTitle = (Button) mView.findViewById(R.id.autoTitle);
+        autoTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNoteTitle(v.getRootView());
+            }
+        });
+
         return mView;
     }
 
