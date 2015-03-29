@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.uqacproject.com.suchnote.BasicDialogFragment;
 import android.uqacproject.com.suchnote.FileManager;
 import android.uqacproject.com.suchnote.MainActivity;
 import android.uqacproject.com.suchnote.NoteDialogFragment;
@@ -27,7 +28,7 @@ import java.util.Date;
 /**
  * Created by corentin on 29/03/2015.
  */
-public class DisplayVideoNoteDialogFragment extends NoteDialogFragment
+public class DisplayVideoNoteDialogFragment extends BasicDialogFragment
         implements DialogInterface.OnDismissListener {
 
 
@@ -55,8 +56,6 @@ public class DisplayVideoNoteDialogFragment extends NoteDialogFragment
 
         String filePath = FileManager.getVideoFilePath(n.getFilename());
         currentFile = new File(filePath);
-
-
 
         myVideoView = (VideoView) mView.findViewById(R.id.video_view);
         if (mediaControls == null) {

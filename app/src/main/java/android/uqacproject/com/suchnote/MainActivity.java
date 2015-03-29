@@ -19,9 +19,12 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.uqacproject.com.suchnote.audiofragment.AudioDialogFragment;
+import android.uqacproject.com.suchnote.audiofragment.DisplayAudioNoteDialogFragment;
 import android.uqacproject.com.suchnote.database.DatabaseManager;
 import android.uqacproject.com.suchnote.database.NoteInformation;
+import android.uqacproject.com.suchnote.photofragment.DisplayPhotoNoteDialogFragment;
 import android.uqacproject.com.suchnote.photofragment.PhotoDialogFragment;
+import android.uqacproject.com.suchnote.textfragment.DisplayTextNoteDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
 import android.uqacproject.com.suchnote.videofragment.DisplayVideoNoteDialogFragment;
 import android.uqacproject.com.suchnote.videofragment.VideoDialogFragment;
@@ -239,7 +242,7 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
             b.putString(WIFI_SSID,ssid);
             wifiInfo.setArguments(b);
             FragmentManager fm = getFragmentManager();
-            wifiInfo.show(fm,"wifi_info_dialogfragment");
+            wifiInfo.show(fm, "wifi_info_dialogfragment");
         }
     }
 
@@ -300,7 +303,7 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO CORENTIN
+
         NoteInformation n = (NoteInformation) parent.getAdapter().getItem(position);
 
         int type = n.getNotetype();
@@ -309,13 +312,22 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
 
         switch (type){
             case MainActivity.TEXT_NOTE:
-
+                b.putSerializable("text_display_note",n);
+                DisplayTextNoteDialogFragment ft = new DisplayTextNoteDialogFragment();
+                ft.setArguments(b);
+                ft.show(getFragmentManager(),"text_display_note");
                 break;
             case MainActivity.AUDIO_NOTE:
-
+                b.putSerializable("audio_display_note",n);
+                DisplayAudioNoteDialogFragment fa = new DisplayAudioNoteDialogFragment();
+                fa.setArguments(b);
+                fa.show(getFragmentManager(),"audio_display_note");
                 break;
             case MainActivity.PHOTO_NOTE:
-
+                b.putSerializable("photo_display_note",n);
+                DisplayPhotoNoteDialogFragment fp = new DisplayPhotoNoteDialogFragment();
+                fp.setArguments(b);
+                fp.show(getFragmentManager(),"photo_display_note");
                 break;
             case MainActivity.VIDEO_NOTE:
                 b.putSerializable("video_display_note",n);

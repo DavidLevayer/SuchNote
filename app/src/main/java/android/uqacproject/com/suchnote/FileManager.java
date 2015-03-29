@@ -86,6 +86,14 @@ public class FileManager {
         return FILE_PATH+VIDEO_DIRECTORY+filename;
     }
 
+    public static String getTextFilePath(String filename){
+
+        File folder = new File(FILE_PATH+TEXT_DIRECTORY);
+        if(!folder.exists())
+            folder.mkdirs();
+
+        return FILE_PATH+TEXT_DIRECTORY+filename;
+    }
     @Deprecated
     public static NoteInformation[] getNotes(int noteType){
         switch(noteType){

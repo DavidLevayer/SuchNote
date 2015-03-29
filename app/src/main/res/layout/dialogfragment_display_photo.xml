@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/top_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_top_rectangle"
+        android:background="@color/main_color"/>
+
+    <ImageView
+        android:id="@+id/imageViewPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:layout_below="@id/top_rectangle"
+        android:contentDescription="@string/banner_alt" />
+
+</RelativeLayout>
