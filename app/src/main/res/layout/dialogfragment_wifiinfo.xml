@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/top_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_top_rectangle"
+        android:background="@color/main_color"/>
+
+    <EditText
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_rectangle"
+        android:layout_marginTop="-40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="Alias pour ce réseau Wifi"
+        android:inputType="text"
+        android:textColorHint="@color/accent_color_negative"
+        android:textColor="@color/accent_color_negative"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:focusable="true"/>
+
+    <com.larswerkman.holocolorpicker.ColorPicker
+        android:id="@+id/picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/title"
+        android:layout_centerInParent="true"/>
+
+    <Button
+        android:id="@+id/validate"
+        android:text="Enregistrer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/picker"
+        android:background="@color/main_color"
+        android:textColor="@color/accent_color_negative"/>
+
+    <Button
+        android:id="@+id/notnow"
+        android:text="Pas maintenant..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/validate"/>
+
+</RelativeLayout>
