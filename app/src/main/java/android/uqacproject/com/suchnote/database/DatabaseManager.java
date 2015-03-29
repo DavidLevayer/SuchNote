@@ -152,4 +152,12 @@ public class DatabaseManager {
         cursor.close();
         return infos;
     }
+
+    public void removeNoteInformation(NoteInformation note){
+        String filename = note.getFilename();
+        int res = mDatabase.delete(
+                DatabaseHelper.TABLE_NOTE_DATA,
+                DatabaseHelper.NOTEDATA_FILENAME+" = ?",
+                new String[]{String.valueOf(filename)});
+    }
 }

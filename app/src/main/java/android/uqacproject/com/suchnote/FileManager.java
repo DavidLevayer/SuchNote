@@ -36,6 +36,29 @@ public class FileManager {
         }
     }
 
+    public static void deleteNote(NoteInformation note){
+        String dir = "";
+        switch(note.getNotetype()){
+            case MainActivity.TEXT_NOTE:
+                dir = TEXT_DIRECTORY;
+                break;
+            case MainActivity.AUDIO_NOTE:
+                dir = AUDIO_DIRECTORY;
+                break;
+            case MainActivity.PHOTO_NOTE:
+                dir = PHOTO_DIRECTORY;
+                break;
+            case MainActivity.VIDEO_NOTE:
+                dir = VIDEO_DIRECTORY;
+                break;
+        }
+
+        File f = new File(FILE_PATH+dir+note.getFilename());
+
+        if(f.exists())
+            f.delete();
+    }
+
     public static String getAudioFilePath(String filename){
 
         File folder = new File(FILE_PATH+AUDIO_DIRECTORY);
