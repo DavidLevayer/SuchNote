@@ -1,11 +1,9 @@
 package android.uqacproject.com.suchnote;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -29,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.io.File;
@@ -207,7 +204,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         // Si le réseau n'est pas connu, on demande des infos à l'utilisateur
         if (associatedName == null) {
-
+            /*
             final EditText input = new EditText(this);
 
             new AlertDialog.Builder(this)
@@ -233,6 +230,13 @@ public class MainActivity extends Activity implements SensorEventListener {
                             mDatabaseManager.close();
                         }
                     }).show();
+                    */
+            DialogFragment wifiInfo = new WifiInfoDialogFragment();
+            Bundle b = new Bundle();
+            b.putString(WIFI_SSID,ssid);
+            wifiInfo.setArguments(b);
+            FragmentManager fm = getFragmentManager();
+            wifiInfo.show(fm,"wifi_info_dialogfragment");
         }
     }
 
