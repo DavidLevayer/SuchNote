@@ -1,11 +1,12 @@
 package android.uqacproject.com.suchnote.database;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by David Levayer on 26/03/15.
  */
-public class NoteInformation {
+public class NoteInformation implements Serializable{
 
     private long id;
     private String filename, associatedName;

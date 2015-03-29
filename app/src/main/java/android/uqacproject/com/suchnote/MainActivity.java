@@ -25,6 +25,7 @@ import android.uqacproject.com.suchnote.database.DatabaseManager;
 import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.uqacproject.com.suchnote.photofragment.PhotoDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
+import android.uqacproject.com.suchnote.videofragment.DisplayVideoNoteDialogFragment;
 import android.uqacproject.com.suchnote.videofragment.VideoDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -298,11 +299,30 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
         // TODO CORENTIN
         NoteInformation n = (NoteInformation) parent.getAdapter().getItem(position);
 
-        /*Bundle b = new Bundle();
-        b.putSerializable();
+        int type = n.getNotetype();
 
-        Fragment f;
-        f.setArguments(b);*/
+        Bundle b = new Bundle();
+
+        switch (type){
+            case MainActivity.TEXT_NOTE:
+
+                break;
+            case MainActivity.AUDIO_NOTE:
+
+                break;
+            case MainActivity.PHOTO_NOTE:
+
+                break;
+            case MainActivity.VIDEO_NOTE:
+                b.putSerializable("video_display_note",n);
+                DisplayVideoNoteDialogFragment f = new DisplayVideoNoteDialogFragment();
+                f.setArguments(b);
+                f.show(getFragmentManager(),"video_display_note");
+                break;
+        }
+
+
+
     }
 
     class NotePagerAdapter extends PagerAdapter {
