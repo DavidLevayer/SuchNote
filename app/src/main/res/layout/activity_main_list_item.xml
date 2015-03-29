@@ -59,17 +59,17 @@
 
     <android.uqacproject.com.suchnote.FloatingActionButton
         android:id="@+id/remove_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="34dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/round_button">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/fab_icons"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/ic_remove"
             android:layout_gravity="center"
             android:duplicateParentState="true" />
 
