@@ -3,6 +3,7 @@ package android.uqacproject.com.suchnote;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.uqacproject.com.suchnote.database.DatabaseManager;
+import android.uqacproject.com.suchnote.database.WifiInformation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class WifiInfoDialogFragment extends BasicDialogFragment implements View.
 
         ColorPicker picker = (ColorPicker) mView.findViewById(R.id.picker);
         picker.setShowOldCenterColor(false);
+        picker.setColor(getResources().getColor(R.color.accent_color));
 
         Button validate = (Button) mView.findViewById(R.id.validate);
         validate.setOnClickListener(this);
@@ -50,9 +52,15 @@ public class WifiInfoDialogFragment extends BasicDialogFragment implements View.
                 value = name;
         }
 
+        ColorPicker picker = (ColorPicker) mView.findViewById(R.id.picker);
+        picker.getColor();
         DatabaseManager mDatabaseManager = new DatabaseManager(getActivity());
         mDatabaseManager.open();
-        mDatabaseManager.addWifiInfo(ssid,value);
+        mDatabaseManager.addWifiInfo(new WifiInformation(
+                ssid,
+                value,
+                String.valueOf(picker.getColor())
+        ));
         mDatabaseManager.close();
 
         dismiss();

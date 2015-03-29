@@ -22,7 +22,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String WIFIDATA_ID = "_id";
     public static final String WIFIDATA_SSID = "wifidatassid";
-    public static final String WIFIDATA_SSID_ASSOCIATED_NAME = "wifidataassociatedname";
+    public static final String WIFIDATA_ASSOCIATED_NAME = "wifidataassociatedname";
+    public static final String WIFIDATA_ASSOCIATED_COLOR = "wifidataassociatedcolor";
 
     private static final String DATABASE_NAME = "notes.db";
     private static final int DATABASE_VERSION = 1;
@@ -43,7 +44,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_WIFI_DATA + "(" +
             WIFIDATA_ID + " integer primary key autoincrement, " +
             WIFIDATA_SSID + " text not null, " +
-            WIFIDATA_SSID_ASSOCIATED_NAME + " text not null);";
+            WIFIDATA_ASSOCIATED_NAME + " text not null," +
+            WIFIDATA_ASSOCIATED_COLOR + " text not null);";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

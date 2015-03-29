@@ -29,7 +29,7 @@ public class DatabaseManager {
 
     private String[] wifiTable_allColumns = {
             DatabaseHelper.WIFIDATA_SSID,
-            DatabaseHelper.WIFIDATA_SSID_ASSOCIATED_NAME};
+            DatabaseHelper.WIFIDATA_ASSOCIATED_NAME};
 
     public DatabaseManager(Context context) {
         mDatabaseHelper = new DatabaseHelper(context);
@@ -54,11 +54,12 @@ public class DatabaseManager {
         mDatabase.insert(DatabaseHelper.TABLE_NOTE_DATA, null, values);
     }
 
-    public void addWifiInfo(String ssid, String associatedName){
+    public void addWifiInfo(WifiInformation info){
 
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.WIFIDATA_SSID, ssid);
-        values.put(DatabaseHelper.WIFIDATA_SSID_ASSOCIATED_NAME, associatedName);
+        values.put(DatabaseHelper.WIFIDATA_SSID, info.getSsid());
+        values.put(DatabaseHelper.WIFIDATA_ASSOCIATED_NAME, info.getAssociatedName());
+        values.put(DatabaseHelper.WIFIDATA_ASSOCIATED_COLOR, info.getAssociatedColor());
         mDatabase.insert(DatabaseHelper.TABLE_WIFI_DATA, null, values);
     }
 
@@ -73,6 +74,15 @@ public class DatabaseManager {
         } catch (ParseException e) {
             Toast.makeText(mContext,"Invalid date format",Toast.LENGTH_LONG).show();
         }
+        return info;
+    }
+
+    private WifiInformation cursorToWifiInfo(Cursor cursor) {
+        WifiInformation info = new WifiInformation();
+        info.setId(cursor.getLong(0));
+        info.setSsid(cursor.getString(1));
+        info.setAssociatedName(cursor.getString(2));
+        info.setAssociatedColor(cursor.getString(3));
         return info;
     }
 
@@ -95,6 +105,7 @@ public class DatabaseManager {
         mDatabase.delete(DatabaseHelper.TABLE_WIFI_DATA, null, null);
     }
 
+    @Deprecated
     public String getWifiAssociatedName(String ssid){
 
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_WIFI_DATA +
@@ -105,6 +116,39 @@ public class DatabaseManager {
         if(cursor != null && cursor.getCount() != 0){
             cursor.moveToFirst();
             String res = cursor.getString(2);
+            cursor.close();
+            return res;
+
+        }
+
+        return null;
+    }
+
+    public WifiInformation getWifiInformation(String ssid){
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_WIFI_DATA +
+                " WHERE " + DatabaseHelper.WIFIDATA_SSID + " = ?";
+
+        Cursor cursor = mDatabase.rawQuery(selectQuery, new String[]{ssid}, null);
+
+        if(cursor != null && cursor.getCount() != 0){
+            cursor.moveToFirst();
+            WifiInformation res = cursorToWifiInfo(cursor);
+            cursor.close();
+            return res;
+        }
+
+        return null;
+    }
+
+    public String getColorFromAssociatedName(String associatedName){
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_WIFI_DATA +
+                " WHERE " + DatabaseHelper.WIFIDATA_ASSOCIATED_NAME + " = ?";
+
+        Cursor cursor = mDatabase.rawQuery(selectQuery, new String[]{associatedName}, null);
+
+        if(cursor != null && cursor.getCount() != 0){
+            cursor.moveToFirst();
+            String res = cursor.getString(3);
             cursor.close();
             return res;
 

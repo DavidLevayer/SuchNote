@@ -2,7 +2,6 @@ package android.uqacproject.com.suchnote;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.hardware.Sensor;
@@ -23,6 +22,7 @@ import android.uqacproject.com.suchnote.audiofragment.DisplayAudioNoteDialogFrag
 import android.uqacproject.com.suchnote.database.DatabaseManager;
 import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.uqacproject.com.suchnote.photofragment.DisplayPhotoNoteDialogFragment;
+import android.uqacproject.com.suchnote.database.WifiInformation;
 import android.uqacproject.com.suchnote.photofragment.PhotoDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.DisplayTextNoteDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
@@ -205,11 +205,11 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
         mDatabaseManager = new DatabaseManager(this);
 
         mDatabaseManager.open();
-        String associatedName = mDatabaseManager.getWifiAssociatedName(ssid);
+        WifiInformation infos = mDatabaseManager.getWifiInformation(ssid);
         mDatabaseManager.close();
 
         // Si le réseau n'est pas connu, on demande des infos à l'utilisateur
-        if (associatedName == null) {
+        if (infos == null) {
             /*
             final EditText input = new EditText(this);
 

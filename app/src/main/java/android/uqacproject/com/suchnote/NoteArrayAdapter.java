@@ -7,16 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by David Levayer on 12/03/15.
  */
 public class NoteArrayAdapter extends ArrayAdapter<NoteInformation> {
+
+    private static Map<String,Integer> placeColors = new HashMap<>();
 
     public NoteArrayAdapter(Context context, ArrayList<NoteInformation> objects) {
         super(context, 0, objects);
@@ -36,8 +41,9 @@ public class NoteArrayAdapter extends ArrayAdapter<NoteInformation> {
                     false);
         }
 
+        String associatedName = n.getAssociatedName();
         ((TextView) convertView.findViewById(R.id.title)).setText(n.getFilename());
-        ((TextView) convertView.findViewById(R.id.place)).setText(n.getAssociatedName());
+        ((TextView) convertView.findViewById(R.id.place)).setText(associatedName);
 
         Date d = n.getDate();
 
@@ -45,6 +51,21 @@ public class NoteArrayAdapter extends ArrayAdapter<NoteInformation> {
         String month = new SimpleDateFormat("MMMM").format(d);
         ((TextView) convertView.findViewById(R.id.day)).setText(day);
         ((TextView) convertView.findViewById(R.id.month)).setText(month);
+
+        ImageView placeIndicator = (ImageView) convertView.findViewById(R.id.place_indicator);
+        int color;
+
+        if(placeColors.containsKey(associatedName))
+            color = placeColors.get(associatedName);
+        else{
+            DatabaseManager mDatabaseManager = new DatabaseManager(getContext());
+            mDatabaseManager.open();
+            String res = mDatabaseManager.getColorFromAssociatedName(associatedName);
+            color = Integer.valueOf(res);
+            placeColors.put(associatedName,color);
+        }
+
+        placeIndicator.setBackgroundColor(color);
 
         FloatingActionButton deleteButton = (FloatingActionButton) convertView.findViewById(R.id.remove_button);
         deleteButton.setOnClickListener(new View.OnClickListener() {
