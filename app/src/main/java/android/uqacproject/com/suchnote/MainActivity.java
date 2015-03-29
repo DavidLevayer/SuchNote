@@ -3,6 +3,7 @@ package android.uqacproject.com.suchnote;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -36,7 +38,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity implements SensorEventListener {
+public class MainActivity extends Activity implements SensorEventListener, AdapterView.OnItemClickListener {
 
     public final static int MODE_NUMBER = 4;
 
@@ -288,6 +290,18 @@ public class MainActivity extends Activity implements SensorEventListener {
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // TODO CORENTIN
+        NoteInformation n = (NoteInformation) parent.getAdapter().getItem(position);
+
+        /*Bundle b = new Bundle();
+        b.putSerializable();
+
+        Fragment f;
+        f.setArguments(b);*/
+    }
+
     class NotePagerAdapter extends PagerAdapter {
 
         public final static String VIEW_TAG = "notePagerAdapterViewTag";
@@ -334,6 +348,8 @@ public class MainActivity extends Activity implements SensorEventListener {
             mListView = (ListView) view.findViewById(R.id.note_listview);
             mNoteAdapter = new NoteArrayAdapter(mContext, new ArrayList<NoteInformation>());
             mListView.setAdapter(mNoteAdapter);
+
+            mListView.setOnItemClickListener(MainActivity.this);
 
             // TODO Add element to the list
             loadNotes(position);

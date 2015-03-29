@@ -45,6 +45,8 @@ public class NoteArrayAdapter extends ArrayAdapter<NoteInformation> {
         ((TextView) convertView.findViewById(R.id.day)).setText(day);
         ((TextView) convertView.findViewById(R.id.month)).setText(month);
 
+
+
         return convertView;
     }
 
