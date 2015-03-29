@@ -1,6 +1,7 @@
 package android.uqacproject.com.suchnote;
 
 import android.content.Context;
+import android.uqacproject.com.suchnote.database.DatabaseManager;
 import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ public class NoteArrayAdapter extends ArrayAdapter<NoteInformation> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // On récupère la note à traiter
-        NoteInformation n = getItem(position);
+        final NoteInformation n = getItem(position);
 
         // Si la vue ne peut pas être réutilisée, on la recrée
         if (convertView == null) {
@@ -45,7 +46,25 @@ public class NoteArrayAdapter extends ArrayAdapter<NoteInformation> {
         ((TextView) convertView.findViewById(R.id.day)).setText(day);
         ((TextView) convertView.findViewById(R.id.month)).setText(month);
 
+        FloatingActionButton deleteButton = (FloatingActionButton) convertView.findViewById(R.id.remove_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                // Suppression de la base de données
+                DatabaseManager mDatabaseManager = new DatabaseManager(getContext());
+                mDatabaseManager.open();
+                mDatabaseManager.removeNoteInformation(n);
+                mDatabaseManager.close();
+
+                // Suppression du fichier
+                FileManager.deleteNote(n);
+
+                // Suppression de la liste
+                remove(n);
+                notifyDataSetChanged();
+            }
+        });
 
         return convertView;
     }

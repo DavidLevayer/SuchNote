@@ -23,7 +23,6 @@ public class SelectorDialogFragment extends BasicDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.dialogfragment_selector, container, false);
-        dialogSize = 0.6f;
 
         Bundle b = getArguments();
         float[] sensorValues = b.getFloatArray(MainActivity.SENSOR_VALUES);

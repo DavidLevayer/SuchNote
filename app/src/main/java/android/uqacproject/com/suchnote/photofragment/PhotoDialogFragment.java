@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.uqacproject.com.suchnote.FileManager;
 import android.uqacproject.com.suchnote.MainActivity;
@@ -39,6 +38,8 @@ public class PhotoDialogFragment extends NoteDialogFragment
 
     private  Button buttonSave;
 
+    private ImageView myPhotoView;
+
     /* ---------------- */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class PhotoDialogFragment extends NoteDialogFragment
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                fileName = ((EditText)mView.findViewById(R.id.title_photo)).getText().toString();
+                fileName = ((EditText)mView.findViewById(R.id.title)).getText().toString();
 
                 if(fileName != null && !fileName.isEmpty()){
                     Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -58,6 +59,8 @@ public class PhotoDialogFragment extends NoteDialogFragment
                     Uri uriSavedImage = Uri.fromFile(currentImage);
                     imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
                     startActivityForResult(imageIntent,0);
+                } else {
+                    Toast.makeText(getActivity(), "Titre invalide", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -78,6 +81,18 @@ public class PhotoDialogFragment extends NoteDialogFragment
                 dismiss();
             }
         });
+
+        myPhotoView = (ImageView) mView.findViewById(R.id.imageViewPhoto);
+        myPhotoView.setVisibility(View.GONE);
+
+        Button autoTitle = (Button) mView.findViewById(R.id.autoTitle);
+        autoTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNoteTitle(v.getRootView());
+            }
+        });
+
         return mView;
     }
 
@@ -87,8 +102,10 @@ public class PhotoDialogFragment extends NoteDialogFragment
                 // Image captured and saved to fileUri specified in the Intent
 
                 Bitmap myBitmap = BitmapFactory.decodeFile(currentImage.getAbsolutePath());
-                ImageView image = (ImageView) mView.findViewById(R.id.imageViewPhoto);
-                image.setImageBitmap(myBitmap);
+                myPhotoView = (ImageView) mView.findViewById(R.id.imageViewPhoto);
+                myPhotoView.setImageBitmap(myBitmap);
+
+                myPhotoView.setVisibility(View.VISIBLE);
 
                 buttonSave.setVisibility(View.VISIBLE);
 

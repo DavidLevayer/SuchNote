@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -34,22 +35,38 @@ public class TextDialogFragment extends NoteDialogFragment implements View.OnCli
         Button sendButton = (Button) mView.findViewById(R.id.textButton);
         sendButton.setOnClickListener(this);
 
+        Button autoTitle = (Button) mView.findViewById(R.id.autoTitle);
+        autoTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNoteTitle(v.getRootView());
+            }
+        });
+
         return mView;
     }
 
     public void onClick(View v) {
 
         String filename = ((EditText)mView.findViewById(R.id.title)).getText().toString();
-        String content = ((EditText)mView.findViewById(R.id.textArea)).getText().toString();
 
-        FileManager.saveText(mContext,filename,content);
+        if(filename != null && !filename.isEmpty()){
 
-        setNote(new NoteInformation(
-                filename,
-                MainActivity.TEXT_NOTE,
-                null,
-                new Date()));
+            String content = ((EditText)mView.findViewById(R.id.textArea)).getText().toString();
 
-        dismiss();
+            FileManager.saveText(mContext,filename,content);
+
+            setNote(new NoteInformation(
+                    filename,
+                    MainActivity.TEXT_NOTE,
+                    null,
+                    new Date()));
+
+            dismiss();
+
+        } else {
+            Toast.makeText(getActivity(), "Titre invalide", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

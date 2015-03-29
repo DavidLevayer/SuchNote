@@ -253,12 +253,15 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
 
     public void addNoteToList(NoteInformation note){
 
+        if(Math.abs(mViewPager.getCurrentItem()-note.getNotetype())<=1){
+            String tag = NotePagerAdapter.VIEW_TAG + String.valueOf(note.getNotetype());
+            View view = mViewPager.findViewWithTag(tag);
+            ListView list = (ListView)view.findViewById(R.id.note_listview);
+            NoteArrayAdapter adapter = (NoteArrayAdapter) list.getAdapter();
+            //adapter.add(note);
+            adapter.insert(note,0);
+        }
         mViewPager.setCurrentItem(note.getNotetype());
-        String tag = NotePagerAdapter.VIEW_TAG + String.valueOf(note.getNotetype());
-        View view = mViewPager.findViewWithTag(tag);
-        ListView list = (ListView)view.findViewById(R.id.note_listview);
-        NoteArrayAdapter adapter = (NoteArrayAdapter) list.getAdapter();
-        adapter.add(note);
     }
 
     public void validateNote(NoteInformation note) {

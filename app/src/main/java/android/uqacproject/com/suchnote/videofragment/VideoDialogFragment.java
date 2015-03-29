@@ -2,13 +2,10 @@ package android.uqacproject.com.suchnote.videofragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.uqacproject.com.suchnote.BasicDialogFragment;
 import android.uqacproject.com.suchnote.FileManager;
 import android.uqacproject.com.suchnote.MainActivity;
 import android.uqacproject.com.suchnote.NoteDialogFragment;
@@ -20,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.File;
@@ -61,7 +58,7 @@ public class VideoDialogFragment  extends NoteDialogFragment
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                fileName = ((EditText)mView.findViewById(R.id.title_video)).getText().toString();
+                fileName = ((EditText)mView.findViewById(R.id.title)).getText().toString();
 
                 if(fileName != null && !fileName.isEmpty()){
                     Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -71,6 +68,8 @@ public class VideoDialogFragment  extends NoteDialogFragment
                     Uri uriSavedVideo = Uri.fromFile(currentVideo);
                     videoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedVideo);
                     startActivityForResult(videoIntent,0);
+                } else {
+                    Toast.makeText(getActivity(),"Titre invalide", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -114,8 +113,14 @@ public class VideoDialogFragment  extends NoteDialogFragment
             }
         });
 
-
-    return mView;
+        Button autoTitle = (Button) mView.findViewById(R.id.autoTitle);
+        autoTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNoteTitle(v.getRootView());
+            }
+        });
+        return mView;
     }
 
     @Override

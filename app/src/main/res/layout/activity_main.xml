@@ -34,7 +34,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/fab_icons"
+            android:src="@drawable/ic_add"
             android:layout_gravity="center"
             android:duplicateParentState="true" />
 
