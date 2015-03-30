@@ -210,33 +210,6 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
 
         // Si le réseau n'est pas connu, on demande des infos à l'utilisateur
         if (infos == null) {
-            /*
-            final EditText input = new EditText(this);
-
-            new AlertDialog.Builder(this)
-                    .setTitle("Associer ce réseau Wifi")
-                    .setMessage("Donner un alias à cette connexion")
-                    .setView(input)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-
-                            String result = input.getText().toString();
-
-                            if (result != null && result.length() > 0){
-                                mDatabaseManager.open();
-                                mDatabaseManager.addWifiInfo(ssid,result);
-                                mDatabaseManager.close();
-                            }
-                        }
-                    })
-                    .setNegativeButton("Réseau inconnu", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            mDatabaseManager.open();
-                            mDatabaseManager.addWifiInfo(ssid,"Réseau inconnu");
-                            mDatabaseManager.close();
-                        }
-                    }).show();
-                    */
             DialogFragment wifiInfo = new WifiInfoDialogFragment();
             Bundle b = new Bundle();
             b.putString(WIFI_SSID,ssid);
