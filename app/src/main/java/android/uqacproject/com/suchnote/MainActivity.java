@@ -21,8 +21,8 @@ import android.uqacproject.com.suchnote.audiofragment.AudioDialogFragment;
 import android.uqacproject.com.suchnote.audiofragment.DisplayAudioNoteDialogFragment;
 import android.uqacproject.com.suchnote.database.DatabaseManager;
 import android.uqacproject.com.suchnote.database.NoteInformation;
-import android.uqacproject.com.suchnote.photofragment.DisplayPhotoNoteDialogFragment;
 import android.uqacproject.com.suchnote.database.WifiInformation;
+import android.uqacproject.com.suchnote.photofragment.DisplayPhotoNoteDialogFragment;
 import android.uqacproject.com.suchnote.photofragment.PhotoDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.DisplayTextNoteDialogFragment;
 import android.uqacproject.com.suchnote.textfragment.TextDialogFragment;
@@ -72,12 +72,16 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
 
     private DatabaseManager mDatabaseManager;
 
+    private float[] sensorValues;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
+
+        sensorValues = new float[SENSOR_NUMBER];
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(new NotePagerAdapter());
@@ -91,13 +95,19 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
                 FragmentManager fm = getFragmentManager();
                 DialogFragment f = new SelectorDialogFragment();
 
+                /*
                 float[] fakeValues = new float[SENSOR_NUMBER];
                 fakeValues[LIGHT_SENSOR] = 10f;
                 fakeValues[SOUND_SENSOR] = 0f;
                 fakeValues[SPEED_SENSOR] = 5f;
+                */
+                // On récupère le niveau du volume
+                float l1 = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                float l2 = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
+                sensorValues[SOUND_SENSOR] = Math.max(l1,l2);
 
                 Bundle b = new Bundle();
-                b.putFloatArray(SENSOR_VALUES, fakeValues);
+                b.putFloatArray(SENSOR_VALUES, sensorValues);
                 f.setArguments(b);
 
                 f.show(fm,"selector_fragment");
@@ -186,7 +196,7 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
         mLocationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 location.getLatitude();
-                // TODO save la vitesse
+                sensorValues[SPEED_SENSOR] = location.getSpeed();
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -223,7 +233,7 @@ public class MainActivity extends Activity implements SensorEventListener, Adapt
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
             case Sensor.TYPE_LIGHT:
-                // TODO save la luminosité
+                sensorValues[LIGHT_SENSOR] = event.values[0];
                 break;
         }
     }

@@ -79,8 +79,8 @@ public class SelectorDialogFragment extends BasicDialogFragment {
         }
 
         if(lightValue >= 20 && lightValue < 50){
-            scores[MainActivity.PHOTO_NOTE] -= 20;
-            scores[MainActivity.VIDEO_NOTE] -= 20;
+            scores[MainActivity.PHOTO_NOTE] -= 15;
+            scores[MainActivity.VIDEO_NOTE] -= 15;
         }
 
         if(audioLevel == 0){
