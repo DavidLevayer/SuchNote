@@ -1,15 +1,11 @@
 package android.uqacproject.com.suchnote.videofragment;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.uqacproject.com.suchnote.BasicDialogFragment;
 import android.uqacproject.com.suchnote.FileManager;
-import android.uqacproject.com.suchnote.MainActivity;
-import android.uqacproject.com.suchnote.NoteDialogFragment;
 import android.uqacproject.com.suchnote.R;
 import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.util.Log;
@@ -17,20 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.MediaController;
-import android.widget.Toast;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import java.io.File;
-import java.util.Date;
 
 /**
  * Created by corentin on 29/03/2015.
  */
 public class DisplayVideoNoteDialogFragment extends BasicDialogFragment
         implements DialogInterface.OnDismissListener {
-
 
     /* ---------------- */
     private View mView;
@@ -53,6 +46,7 @@ public class DisplayVideoNoteDialogFragment extends BasicDialogFragment
 
         //Récupération du contenu du bundle
         NoteInformation n = (NoteInformation) getArguments().getSerializable("video_display_note");
+        ((TextView)mView.findViewById(R.id.title)).setText(n.getFilename());
 
         String filePath = FileManager.getVideoFilePath(n.getFilename());
         currentFile = new File(filePath);
@@ -98,8 +92,6 @@ public class DisplayVideoNoteDialogFragment extends BasicDialogFragment
                 }
             }
         });
-
-
 
         return mView;
     }

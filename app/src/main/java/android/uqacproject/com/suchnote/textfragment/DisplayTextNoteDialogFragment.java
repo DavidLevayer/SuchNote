@@ -4,13 +4,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.uqacproject.com.suchnote.BasicDialogFragment;
 import android.uqacproject.com.suchnote.FileManager;
-import android.uqacproject.com.suchnote.NoteDialogFragment;
 import android.uqacproject.com.suchnote.R;
 import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -34,8 +32,9 @@ public class DisplayTextNoteDialogFragment extends BasicDialogFragment
         mView = inflater.inflate(R.layout.dialogfragment_display_text, container, false);
 
         NoteInformation n = (NoteInformation) getArguments().getSerializable("text_display_note");
+        ((TextView)mView.findViewById(R.id.title)).setText(n.getFilename());
 
-        TextView tViewTitle = (TextView) mView.findViewById(R.id.textViewTitle);
+        TextView tViewTitle = (TextView) mView.findViewById(R.id.title);
         tViewTitle.setText(n.getFilename());
 
         String filePath = FileManager.getTextFilePath(n.getFilename());

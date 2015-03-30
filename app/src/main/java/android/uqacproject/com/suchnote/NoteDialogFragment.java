@@ -41,7 +41,7 @@ public class NoteDialogFragment extends BasicDialogFragment {
 
     public void addNoteTitle (View v) {
         EditText title = (EditText)v.findViewById(R.id.title);
-        String text = new SimpleDateFormat("'Note de 'HH':'mm':'ss").format(new Date());
+        String text = new SimpleDateFormat("'Note - 'HH'h'mm' et 'ss's'").format(new Date());
         title.setText(text);
         title.clearFocus();
     }

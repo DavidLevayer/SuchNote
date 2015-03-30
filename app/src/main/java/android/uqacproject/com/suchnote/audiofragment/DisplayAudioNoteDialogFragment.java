@@ -2,12 +2,9 @@ package android.uqacproject.com.suchnote.audiofragment;
 
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.uqacproject.com.suchnote.BasicDialogFragment;
 import android.uqacproject.com.suchnote.FileManager;
-import android.uqacproject.com.suchnote.MainActivity;
-import android.uqacproject.com.suchnote.NoteDialogFragment;
 import android.uqacproject.com.suchnote.R;
 import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.util.Log;
@@ -15,10 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * Created by corentin on 29/03/2015.
@@ -54,6 +50,7 @@ public class DisplayAudioNoteDialogFragment extends BasicDialogFragment
         });
 
         NoteInformation n = (NoteInformation) getArguments().getSerializable("audio_display_note");
+        ((TextView)mView.findViewById(R.id.title)).setText(n.getFilename());
 
         mFilename = FileManager.getAudioFilePath(n.getFilename());
 

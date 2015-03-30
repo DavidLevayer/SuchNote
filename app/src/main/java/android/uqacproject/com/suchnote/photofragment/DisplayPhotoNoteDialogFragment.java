@@ -3,18 +3,16 @@ package android.uqacproject.com.suchnote.photofragment;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.uqacproject.com.suchnote.BasicDialogFragment;
 import android.uqacproject.com.suchnote.FileManager;
-import android.uqacproject.com.suchnote.NoteDialogFragment;
 import android.uqacproject.com.suchnote.R;
 import android.uqacproject.com.suchnote.database.NoteInformation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 
@@ -40,6 +38,7 @@ public class DisplayPhotoNoteDialogFragment extends BasicDialogFragment
 
         //Récupération du contenu du bundle
         NoteInformation n = (NoteInformation) getArguments().getSerializable("photo_display_note");
+        ((TextView)mView.findViewById(R.id.title)).setText(n.getFilename());
         String filePath = FileManager.getPhotoFilePath(n.getFilename());
         currentImage = new File(filePath);
 
