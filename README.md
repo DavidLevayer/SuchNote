@@ -8,6 +8,8 @@ Projet UQAC de création d'une application de prise de notes.
 
 - de choisir parmi 4 types de notes : Texte, Audio, Photo et Vidéo. En fonction des capteurs de l'appareil, un type de note est conseillé, mais les autres types restent accessibles. La raison de ce choix est simple : l'informatique ubiquitaire est un outil important, mais l'utilisateur doit avoir le dernier mot !
 
+- Nommer les notes de manière automatique, en cliquant sur l'icône à droite du champs de saisie. On gagne du temps, et on reste cohérent vis-à-vis des types de notes (aucun de texte à saisir).
+
 - au démarrage de l'application, si le réseau Wifi (auquel l'appareil est connecté) est inconnu, une fenêtre permet à l'utilisateur d'enregistrer ce réseau (choix d'un alias et d'une couleur). Cette information est ensuite associée à toutes les notes enregistrées en étant connecté à ce réseau.
 
 - Les notes sont affichées sur la page principale de l'application. Afin de permettre à l'utlisateur de s'y retrouver, elles sont triées par catégories. Le code couleur permet d'associer rapidement une note à son contexte. Par exemple, la couleur verte pour les notes prises à l'UQAC (comprendre "en étant connecté au réseau Wifi de l'UQAC").
